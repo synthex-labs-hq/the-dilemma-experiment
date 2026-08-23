@@ -7,6 +7,7 @@ from the_dilemma_experiment.strategies.always_cooperate import (
 from the_dilemma_experiment.strategies.always_defect import (
     AlwaysDefectStrategy,
 )
+from the_dilemma_experiment.strategies.tit_for_tat import TitForTatStrategy
 
 
 def test_always_cooperate_is_concrete_strategy():
@@ -101,3 +102,60 @@ def test_always_defect_has_no_unnecessary_mutable_state():
     strategy.observe("agent_2", Action.COOPERATE)
 
     assert not hasattr(strategy, "__dict__") or len(strategy.__dict__) == 0
+
+
+def test_tit_for_tat_is_concrete_strategy():
+    """Verify TitForTatStrategy inherits from Strategy."""
+    strategy = TitForTatStrategy()
+
+    assert isinstance(strategy, Strategy)
+
+
+def test_tit_for_tat_cooperates_with_unknown_opponent():
+    """Verify TitForTat cooperates when it has no previous observation."""
+    strategy = TitForTatStrategy()
+    context = DecisionContext(opponent_id="agent_2")
+
+    assert strategy.choose_action(context) == Action.COOPERATE
+
+
+def test_tit_for_tat_mirrors_opponents_last_action():
+    """Verify TitForTat mirrors the opponent's most recently observed action."""
+    strategy = TitForTatStrategy()
+    context = DecisionContext(opponent_id="agent_2")
+
+    strategy.observe("agent_2", Action.DEFECT)
+    assert strategy.choose_action(context) == Action.DEFECT
+
+    strategy.observe("agent_2", Action.COOPERATE)
+    assert strategy.choose_action(context) == Action.COOPERATE
+
+
+def test_tit_for_tat_tracks_opponents_independently():
+    """Verify each opponent has independent last-action state."""
+    strategy = TitForTatStrategy()
+
+    strategy.observe("agent_2", Action.DEFECT)
+    strategy.observe("agent_3", Action.COOPERATE)
+
+    assert (
+        strategy.choose_action(DecisionContext(opponent_id="agent_2")) == Action.DEFECT
+    )
+
+    assert (
+        strategy.choose_action(DecisionContext(opponent_id="agent_3"))
+        == Action.COOPERATE
+    )
+
+
+def test_tit_for_tat_keeps_only_latest_opponent_action():
+    """Verify a new observation replaces the opponent's previous action."""
+    strategy = TitForTatStrategy()
+
+    strategy.observe("agent_2", Action.DEFECT)
+    strategy.observe("agent_2", Action.COOPERATE)
+
+    assert (
+        strategy.choose_action(DecisionContext(opponent_id="agent_2"))
+        == Action.COOPERATE
+    )

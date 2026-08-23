@@ -18,6 +18,9 @@ from the_dilemma_experiment.strategies.always_cooperate import (
 from the_dilemma_experiment.strategies.always_defect import (
     AlwaysDefectStrategy,
 )
+from the_dilemma_experiment.strategies.tit_for_tat import (
+    TitForTatStrategy,
+)
 
 __all__ = [
     "DEFAULT_PAYOFF_MATRIX",
@@ -32,4 +35,5 @@ __all__ = [
     "PrisonersDilemma",
     "Round",
     "Strategy",
+    "TitForTatStrategy",
 ]

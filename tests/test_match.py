@@ -1,11 +1,13 @@
 import pytest
 
+from the_dilemma_experiment import AlwaysDefectStrategy, Payoff
 from the_dilemma_experiment.domain.action import Action
 from the_dilemma_experiment.domain.agent import Agent
 from the_dilemma_experiment.domain.context import DecisionContext
 from the_dilemma_experiment.domain.match import Match
 from the_dilemma_experiment.domain.prisoners_dilemma import PrisonersDilemma
 from the_dilemma_experiment.domain.strategy import Strategy
+from the_dilemma_experiment.strategies.tit_for_tat import TitForTatStrategy
 
 
 class AlwaysCooperateStrategy(Strategy):
@@ -334,3 +336,39 @@ def test_match_cannot_be_executed_twice():
 
     # History must not have been duplicated.
     assert len(match.rounds) == 2
+
+
+def test_match_supports_tit_for_tat_against_always_defect():
+    """Verify Tit-for-Tat responds to an Always Defect opponent across rounds."""
+    first_agent = Agent(
+        id="agent_tft",
+        strategy=TitForTatStrategy(),
+    )
+    second_agent = Agent(
+        id="agent_defect",
+        strategy=AlwaysDefectStrategy(),
+    )
+    game = PrisonersDilemma()
+
+    match = Match(
+        first_agent=first_agent,
+        second_agent=second_agent,
+        game=game,
+        round_count=3,
+    )
+
+    rounds = match.execute()
+
+    assert len(rounds) == 3
+
+    assert rounds[0].first_action == Action.COOPERATE
+    assert rounds[0].second_action == Action.DEFECT
+    assert rounds[0].payoff == Payoff(0, 5)
+
+    assert rounds[1].first_action == Action.DEFECT
+    assert rounds[1].second_action == Action.DEFECT
+    assert rounds[1].payoff == Payoff(1, 1)
+
+    assert rounds[2].first_action == Action.DEFECT
+    assert rounds[2].second_action == Action.DEFECT
+    assert rounds[2].payoff == Payoff(1, 1)
