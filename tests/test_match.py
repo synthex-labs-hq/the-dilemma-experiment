@@ -469,7 +469,7 @@ def test_match_result_property_has_no_setter():
 
 
 def test_match_retry_on_failure_and_partial_state_isolation():
-    """Verify a failed execution attempt does not commit partial rounds or result, allowing retry."""
+    """Verify a failed execution attempt does not commit partial rounds or result, allowing retry from round 1."""
     failing_strategy = FailingStrategy(fail_on_call=2)
     first_agent = Agent("agent_1", AlwaysCooperateStrategy())
     second_agent = Agent("agent_2", failing_strategy)
@@ -481,18 +481,19 @@ def test_match_retry_on_failure_and_partial_state_isolation():
         round_count=3,
     )
 
-    # Attempt 1 fails during round 2
+    # Attempt 1 fails during round 2 (on failing_strategy's 2nd call)
     with pytest.raises(RuntimeError, match="Strategy execution error"):
         match.execute()
 
     # Match state must remain clean and uncommitted
     assert match.result is None
     assert match.rounds == ()
+    assert failing_strategy.call_count == 2
 
     # Resolve failure condition for attempt 2
     failing_strategy.should_fail = False
 
-    # Attempt 2 (retry) executes all 3 rounds from start
+    # Attempt 2 (retry) executes all 3 rounds from start (3 additional strategy calls)
     retry_rounds = match.execute()
 
     assert len(retry_rounds) == 3
@@ -500,3 +501,6 @@ def test_match_retry_on_failure_and_partial_state_isolation():
     assert match.result is not None
     assert match.result.first_score == 9
     assert match.result.second_score == 9
+
+    # 2 calls from failed attempt + 3 calls from full retry = 5 total calls
+    assert failing_strategy.call_count == 5
