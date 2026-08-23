@@ -15,12 +15,16 @@ from the_dilemma_experiment.domain.strategy import Strategy
 from the_dilemma_experiment.strategies.always_cooperate import (
     AlwaysCooperateStrategy,
 )
+from the_dilemma_experiment.strategies.always_defect import (
+    AlwaysDefectStrategy,
+)
 
 __all__ = [
     "DEFAULT_PAYOFF_MATRIX",
     "Action",
     "Agent",
     "AlwaysCooperateStrategy",
+    "AlwaysDefectStrategy",
     "DecisionContext",
     "Game",
     "Match",
