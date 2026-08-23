@@ -62,6 +62,21 @@ class CountingStrategy(Strategy):
         self.observation_count += 1
 
 
+class FailingStrategy(Strategy):
+    """Test strategy that deterministically fails on a specified call count."""
+
+    def __init__(self, fail_on_call: int) -> None:
+        self.call_count = 0
+        self.fail_on_call = fail_on_call
+        self.should_fail = True
+
+    def choose_action(self, context: DecisionContext) -> Action:
+        self.call_count += 1
+        if self.should_fail and self.call_count == self.fail_on_call:
+            raise RuntimeError("Strategy execution error")
+        return Action.COOPERATE
+
+
 def test_match_can_be_created():
     """Verify a valid Match can be constructed."""
     first_agent = Agent(id="agent_1", strategy=AlwaysCooperateStrategy())
@@ -73,6 +88,7 @@ def test_match_can_be_created():
     )
 
     assert match.rounds == ()
+    assert match.result is None
 
 
 def test_match_rejects_non_integer_round_count():
@@ -313,7 +329,7 @@ def test_match_reuses_strategy_instances_across_rounds():
 
 
 def test_match_cannot_be_executed_twice():
-    """Verify a Match cannot be executed more than once."""
+    """Verify a Match cannot be executed more than once after successful completion."""
     first_agent = Agent("agent_1", AlwaysCooperateStrategy())
     second_agent = Agent("agent_2", AlwaysCooperateStrategy())
 
@@ -372,3 +388,115 @@ def test_match_supports_tit_for_tat_against_always_defect():
     assert rounds[2].first_action == Action.DEFECT
     assert rounds[2].second_action == Action.DEFECT
     assert rounds[2].payoff == Payoff(1, 1)
+
+
+def test_match_result_unavailable_before_execution():
+    """Verify match.result is None before execution."""
+    first_agent = Agent("agent_1", AlwaysCooperateStrategy())
+    second_agent = Agent("agent_2", AlwaysCooperateStrategy())
+
+    match = Match(
+        first_agent=first_agent,
+        second_agent=second_agent,
+        game=PrisonersDilemma(),
+        round_count=3,
+    )
+
+    assert match.result is None
+
+
+def test_match_result_available_after_execution():
+    """Verify match.result is populated with correct MatchResult after execution."""
+    first_agent = Agent("agent_1", AlwaysCooperateStrategy())
+    second_agent = Agent("agent_2", AlwaysCooperateStrategy())
+
+    match = Match(
+        first_agent=first_agent,
+        second_agent=second_agent,
+        game=PrisonersDilemma(),
+        round_count=3,
+    )
+
+    match.execute()
+
+    result = match.result
+    assert result is not None
+    assert result.first_agent_id == "agent_1"
+    assert result.second_agent_id == "agent_2"
+    assert result.first_score == 9
+    assert result.second_score == 9
+
+
+def test_match_result_agrees_with_round_history_for_tft_vs_always_defect():
+    """Verify MatchResult scores match aggregate round payoffs in TFT vs AlwaysDefect match."""
+    first_agent = Agent("agent_tft", TitForTatStrategy())
+    second_agent = Agent("agent_defect", AlwaysDefectStrategy())
+
+    match = Match(
+        first_agent=first_agent,
+        second_agent=second_agent,
+        game=PrisonersDilemma(),
+        round_count=3,
+    )
+
+    match.execute()
+
+    result = match.result
+    assert result is not None
+    assert result.first_score == 2
+    assert result.second_score == 7
+
+    assert result.first_score == sum(r.payoff.first for r in match.rounds)
+    assert result.second_score == sum(r.payoff.second for r in match.rounds)
+
+
+def test_match_result_property_has_no_setter():
+    """Verify match.result is a read-only property and cannot be directly assigned."""
+    first_agent = Agent("agent_1", AlwaysCooperateStrategy())
+    second_agent = Agent("agent_2", AlwaysCooperateStrategy())
+
+    match = Match(
+        first_agent=first_agent,
+        second_agent=second_agent,
+        game=PrisonersDilemma(),
+        round_count=2,
+    )
+
+    match.execute()
+
+    with pytest.raises(AttributeError):
+        match.result = None  # type: ignore[misc]
+
+
+def test_match_retry_on_failure_and_partial_state_isolation():
+    """Verify a failed execution attempt does not commit partial rounds or result, allowing retry."""
+    failing_strategy = FailingStrategy(fail_on_call=2)
+    first_agent = Agent("agent_1", AlwaysCooperateStrategy())
+    second_agent = Agent("agent_2", failing_strategy)
+
+    match = Match(
+        first_agent=first_agent,
+        second_agent=second_agent,
+        game=PrisonersDilemma(),
+        round_count=3,
+    )
+
+    # Attempt 1 fails during round 2
+    with pytest.raises(RuntimeError, match="Strategy execution error"):
+        match.execute()
+
+    # Match state must remain clean and uncommitted
+    assert match.result is None
+    assert match.rounds == ()
+
+    # Resolve failure condition for attempt 2
+    failing_strategy.should_fail = False
+
+    # Attempt 2 (retry) executes all 3 rounds from start
+    retry_rounds = match.execute()
+
+    assert len(retry_rounds) == 3
+    assert match.rounds == retry_rounds
+    assert match.result is not None
+    assert match.result.first_score == 9
+    assert match.result.second_score == 9
