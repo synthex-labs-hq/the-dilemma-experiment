@@ -12,11 +12,15 @@ from the_dilemma_experiment.domain.prisoners_dilemma import (
 )
 from the_dilemma_experiment.domain.round import Round
 from the_dilemma_experiment.domain.strategy import Strategy
+from the_dilemma_experiment.strategies.always_cooperate import (
+    AlwaysCooperateStrategy,
+)
 
 __all__ = [
     "DEFAULT_PAYOFF_MATRIX",
     "Action",
     "Agent",
+    "AlwaysCooperateStrategy",
     "DecisionContext",
     "Game",
     "Match",
