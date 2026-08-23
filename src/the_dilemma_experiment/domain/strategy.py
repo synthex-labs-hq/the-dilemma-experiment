@@ -14,4 +14,3 @@ class Strategy(ABC):
 
     def observe(self, opponent_id: str, action: Action) -> None:
         """Observe an opponent's action to update internal strategy state if needed."""
-        pass
