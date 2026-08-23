@@ -5,6 +5,7 @@ from the_dilemma_experiment.domain.agent import Agent
 from the_dilemma_experiment.domain.context import DecisionContext
 from the_dilemma_experiment.domain.game import Game
 from the_dilemma_experiment.domain.match import Match
+from the_dilemma_experiment.domain.match_result import MatchResult
 from the_dilemma_experiment.domain.payoff import Payoff
 from the_dilemma_experiment.domain.prisoners_dilemma import (
     DEFAULT_PAYOFF_MATRIX,
@@ -31,6 +32,7 @@ __all__ = [
     "DecisionContext",
     "Game",
     "Match",
+    "MatchResult",
     "Payoff",
     "PrisonersDilemma",
     "Round",
