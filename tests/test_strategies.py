@@ -1,5 +1,8 @@
 from the_dilemma_experiment.domain.action import Action
+from the_dilemma_experiment.domain.agent import Agent
 from the_dilemma_experiment.domain.context import DecisionContext
+from the_dilemma_experiment.domain.match import Match
+from the_dilemma_experiment.domain.prisoners_dilemma import PrisonersDilemma
 from the_dilemma_experiment.domain.strategy import Strategy
 from the_dilemma_experiment.strategies.always_cooperate import (
     AlwaysCooperateStrategy,
@@ -157,5 +160,57 @@ def test_tit_for_tat_keeps_only_latest_opponent_action():
 
     assert (
         strategy.choose_action(DecisionContext(opponent_id="agent_2"))
+        == Action.COOPERATE
+    )
+
+
+def test_strategy_state_persists_across_matches_for_reused_agent():
+    """Verify strategy state belongs to the reused Agent/Strategy instance and persists across Matches."""
+    tft_agent = Agent("agent_tft", TitForTatStrategy())
+    defect_agent = Agent("agent_defect", AlwaysDefectStrategy())
+    game = PrisonersDilemma()
+
+    match1 = Match(
+        first_agent=tft_agent,
+        second_agent=defect_agent,
+        game=game,
+        round_count=1,
+    )
+    rounds1 = match1.execute()
+    assert rounds1[0].first_action == Action.COOPERATE
+
+    # Match 2 reuses the same tft_agent and defect_agent instances
+    match2 = Match(
+        first_agent=tft_agent,
+        second_agent=defect_agent,
+        game=game,
+        round_count=1,
+    )
+    rounds2 = match2.execute()
+
+    # TFT remembers opponent's DEFECT from Match 1 and defects on first action of Match 2
+    assert rounds2[0].first_action == Action.DEFECT
+
+
+def test_independent_strategy_instances_are_isolated():
+    """Verify that separate TitForTatStrategy instances do not share state."""
+    strategy_a = TitForTatStrategy()
+    strategy_b = TitForTatStrategy()
+
+    agent_a = Agent("agent_a", strategy_a)
+    agent_b = Agent("agent_b", strategy_b)
+
+    # Strategy A observes an opponent DEFECT via standard strategy notification
+    agent_a.strategy.observe("opponent_x", Action.DEFECT)
+
+    # Strategy A chooses DEFECT for opponent_x
+    assert (
+        agent_a.strategy.choose_action(DecisionContext(opponent_id="opponent_x"))
+        == Action.DEFECT
+    )
+
+    # Strategy B, having no observation for opponent_x, chooses COOPERATE
+    assert (
+        agent_b.strategy.choose_action(DecisionContext(opponent_id="opponent_x"))
         == Action.COOPERATE
     )
