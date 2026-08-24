@@ -10,6 +10,9 @@ The project begins with the repeated Prisoner's Dilemma and will evolve through 
 
 ## Episode 1 — Can Cooperation Survive?
 
+Read the detailed narrative:
+- [Episode 1 — Building the Laboratory](docs/episodes/01-building-the-laboratory.md)
+
 The first experiment explores how different strategies behave when repeatedly interacting in the Prisoner's Dilemma.
 
 Initial strategies:
