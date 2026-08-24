@@ -1,4 +1,4 @@
-# ADR-009: Strategy State and Lifecycle
+# ADR-010: Strategy State and Lifecycle
 
 ## Status
 
