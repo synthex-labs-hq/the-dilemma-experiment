@@ -504,3 +504,89 @@ def test_match_retry_on_failure_and_partial_state_isolation():
 
     # 2 calls from failed attempt + 3 calls from full retry = 5 total calls
     assert failing_strategy.call_count == 5
+
+
+def test_match_integration_stable_cooperation():
+    """Verify end-to-end match execution for stable cooperation (AlwaysCooperate vs AlwaysCooperate)."""
+    first_agent = Agent(
+        id="agent_cooperate_1",
+        strategy=AlwaysCooperateStrategy(),
+    )
+    second_agent = Agent(
+        id="agent_cooperate_2",
+        strategy=AlwaysCooperateStrategy(),
+    )
+    game = PrisonersDilemma()
+
+    match = Match(
+        first_agent=first_agent,
+        second_agent=second_agent,
+        game=game,
+        round_count=3,
+    )
+
+    match.execute()
+
+    assert len(match.rounds) == 3
+
+    for round_result in match.rounds:
+        assert round_result.first_action == Action.COOPERATE
+        assert round_result.second_action == Action.COOPERATE
+        assert round_result.payoff == Payoff(3, 3)
+
+    result = match.result
+    assert result is not None
+    assert result.first_agent_id == "agent_cooperate_1"
+    assert result.second_agent_id == "agent_cooperate_2"
+    assert result.first_score == 9
+    assert result.second_score == 9
+
+    assert result.first_score == sum(
+        round_result.payoff.first for round_result in match.rounds
+    )
+    assert result.second_score == sum(
+        round_result.payoff.second for round_result in match.rounds
+    )
+
+
+def test_match_integration_persistent_exploitation():
+    """Verify end-to-end match execution for persistent exploitation (AlwaysDefect vs AlwaysCooperate)."""
+    first_agent = Agent(
+        id="agent_defect",
+        strategy=AlwaysDefectStrategy(),
+    )
+    second_agent = Agent(
+        id="agent_cooperate",
+        strategy=AlwaysCooperateStrategy(),
+    )
+    game = PrisonersDilemma()
+
+    match = Match(
+        first_agent=first_agent,
+        second_agent=second_agent,
+        game=game,
+        round_count=3,
+    )
+
+    match.execute()
+
+    assert len(match.rounds) == 3
+
+    for round_result in match.rounds:
+        assert round_result.first_action == Action.DEFECT
+        assert round_result.second_action == Action.COOPERATE
+        assert round_result.payoff == Payoff(5, 0)
+
+    result = match.result
+    assert result is not None
+    assert result.first_agent_id == "agent_defect"
+    assert result.second_agent_id == "agent_cooperate"
+    assert result.first_score == 15
+    assert result.second_score == 0
+
+    assert result.first_score == sum(
+        round_result.payoff.first for round_result in match.rounds
+    )
+    assert result.second_score == sum(
+        round_result.payoff.second for round_result in match.rounds
+    )
