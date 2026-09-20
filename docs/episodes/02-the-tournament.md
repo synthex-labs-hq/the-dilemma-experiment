@@ -16,6 +16,9 @@ This document contains publication-ready scripts tailored for each distribution 
 
 # Building a Multi-Agent Tournament Engine: Simulating Emergent Cooperation in Python
 
+![Hashnode Cover Image](images/ep2_hashnode_cover.jpg)
+*Figure: The multi-agent tournament arena — five autonomous archetypes competing under repeated Prisoner's Dilemma rules.*
+
 In [Episode 1: Building the Laboratory](https://techecho.hashnode.dev/), we constructed a deterministic, isolated foundation for repeated two-agent Prisoner's Dilemma interactions. We verified that when interactions repeat, reciprocal strategies (`Tit-for-Tat`) can withstand exploitation from unprovoked defectors.
 
 However, a two-player duel is not an ecosystem.
@@ -183,7 +186,7 @@ Repository: [synthex-labs-hq/the-dilemma-experiment](https://github.com/synthex-
 
 ---
 
-<!-- IMAGE: [Insert Hero Visual — Prompt 1: The Arena of Five] -->
+![Medium Hero Cover](images/ep2_medium_cover.jpg)
 *The Arena of Five: Minimalist synthetic entities competing in an uncoordinated round-robin tournament.*
 
 If being selfish produces the highest individual payout on every single transaction, why hasn’t the universe collapsed into endless exploitation?
@@ -212,7 +215,7 @@ Every agent played every other agent for repeated rounds. No communication. No c
 
 ---
 
-<!-- IMAGE: [Insert Scene 2 Visual — Prompt 2: The Grudger's Fatal Wall] -->
+![The Grudger's Fatal Wall](images/ep2_grudger_wall.jpg)
 *The Grudger's Wall: Zero forgiveness avoids exploitation, but destroys future opportunity.*
 
 ### The Tragedy of the Unforgiving
@@ -230,7 +233,7 @@ For the remaining 48 rounds, The Grudger refused to ever cooperate again. Even w
 
 ---
 
-<!-- IMAGE: [Insert Scene 3 Visual — Prompt 3: The Cooperative Society Network] -->
+![The Cooperative Society Network](images/ep2_cooperative_society.jpg)
 *Emergence: Reciprocal agents form an illuminated web of compounding trust, while predators flicker in isolation.*
 
 ### The Axelrod Paradox: Winning Every Duel, Losing the War
@@ -298,6 +301,9 @@ Stay tuned.
 **Format**: High-signal, executive takeaway with direct references to Hashnode & Medium.
 
 ---
+
+![LinkedIn Post Visual](images/ep2_linkedin_post.jpg)
+*Suggested Image: High-contrast 1:1 square visual of the multi-agent tournament arena for maximum feed stopping-power.*
 
 ### LinkedIn Post Copy:
 
