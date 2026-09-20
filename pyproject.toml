@@ -1,8 +1,9 @@
 [project]
 name = "the-dilemma-experiment"
-version = "0.1.0"
+version = "0.2.0"
 description = "An open-source simulation exploring how cooperation emerges, survives, and collapses among self-interested agents."
 readme = "README.md"
+license = { text = "MIT" }
 authors = [
     { name = "Dipen Shah", email = "synthex.labs.hq@gmail.com" }
 ]

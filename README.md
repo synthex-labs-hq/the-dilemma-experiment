@@ -75,5 +75,5 @@ The goal is to build reproducible simulations and understand what emerges from t
 
 ## License
 
-Not licensed yet. The repository is currently private and is intended to become open source as the project matures.
+This project is licensed under the [MIT License](LICENSE).
 
