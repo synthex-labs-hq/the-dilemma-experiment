@@ -19,6 +19,12 @@ from the_dilemma_experiment.strategies.always_cooperate import (
 from the_dilemma_experiment.strategies.always_defect import (
     AlwaysDefectStrategy,
 )
+from the_dilemma_experiment.strategies.grim_trigger import (
+    GrimTriggerStrategy,
+)
+from the_dilemma_experiment.strategies.random_strategy import (
+    RandomStrategy,
+)
 from the_dilemma_experiment.strategies.tit_for_tat import (
     TitForTatStrategy,
 )
@@ -31,10 +37,12 @@ __all__ = [
     "AlwaysDefectStrategy",
     "DecisionContext",
     "Game",
+    "GrimTriggerStrategy",
     "Match",
     "MatchResult",
     "Payoff",
     "PrisonersDilemma",
+    "RandomStrategy",
     "Round",
     "Strategy",
     "TitForTatStrategy",

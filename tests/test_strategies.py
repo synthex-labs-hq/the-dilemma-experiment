@@ -214,3 +214,167 @@ def test_independent_strategy_instances_are_isolated():
         agent_b.strategy.choose_action(DecisionContext(opponent_id="opponent_x"))
         == Action.COOPERATE
     )
+
+
+# --- RandomStrategy Tests ---
+
+
+def test_random_strategy_is_concrete_strategy():
+    """Verify RandomStrategy inherits from Strategy and can be instantiated."""
+    from the_dilemma_experiment.strategies.random_strategy import RandomStrategy
+
+    assert issubclass(RandomStrategy, Strategy)
+    strategy = RandomStrategy()
+    assert isinstance(strategy, Strategy)
+    assert strategy.cooperation_probability == 0.5
+
+
+def test_random_strategy_probability_validation():
+    """Verify RandomStrategy raises ValueError when probability is out of bounds."""
+    import pytest
+    from the_dilemma_experiment.strategies.random_strategy import RandomStrategy
+
+    with pytest.raises(ValueError, match="cooperation_probability must be between 0.0 and 1.0"):
+        RandomStrategy(cooperation_probability=-0.1)
+
+    with pytest.raises(ValueError, match="cooperation_probability must be between 0.0 and 1.0"):
+        RandomStrategy(cooperation_probability=1.1)
+
+
+def test_random_strategy_deterministic_with_seed():
+    """Verify RandomStrategy produces identical sequences when given the same seed."""
+    from the_dilemma_experiment.strategies.random_strategy import RandomStrategy
+
+    strat1 = RandomStrategy(seed=42)
+    strat2 = RandomStrategy(seed=42)
+
+    context = DecisionContext(opponent_id="opp")
+    actions1 = [strat1.choose_action(context) for _ in range(50)]
+    actions2 = [strat2.choose_action(context) for _ in range(50)]
+
+    assert actions1 == actions2
+    # Verify sequence has both cooperate and defect
+    assert Action.COOPERATE in actions1
+    assert Action.DEFECT in actions1
+
+
+def test_random_strategy_extreme_probabilities():
+    """Verify cooperation_probability=1.0 always cooperates and 0.0 always defects."""
+    from the_dilemma_experiment.strategies.random_strategy import RandomStrategy
+
+    always_c = RandomStrategy(cooperation_probability=1.0)
+    always_d = RandomStrategy(cooperation_probability=0.0)
+    context = DecisionContext(opponent_id="opp")
+
+    for _ in range(20):
+        assert always_c.choose_action(context) == Action.COOPERATE
+        assert always_d.choose_action(context) == Action.DEFECT
+
+
+def test_random_strategy_observe_does_not_raise():
+    """Verify observe does not fail on RandomStrategy."""
+    from the_dilemma_experiment.strategies.random_strategy import RandomStrategy
+
+    strategy = RandomStrategy()
+    strategy.observe("opp_1", Action.COOPERATE)
+    strategy.observe("opp_1", Action.DEFECT)
+
+
+# --- GrimTriggerStrategy Tests ---
+
+
+def test_grim_trigger_is_concrete_strategy():
+    """Verify GrimTriggerStrategy inherits from Strategy and can be instantiated."""
+    from the_dilemma_experiment.strategies.grim_trigger import GrimTriggerStrategy
+
+    assert issubclass(GrimTriggerStrategy, Strategy)
+    strategy = GrimTriggerStrategy()
+    assert isinstance(strategy, Strategy)
+
+
+def test_grim_trigger_cooperates_initially():
+    """Verify GrimTriggerStrategy starts by cooperating with an unseen opponent."""
+    from the_dilemma_experiment.strategies.grim_trigger import GrimTriggerStrategy
+
+    strategy = GrimTriggerStrategy()
+    context = DecisionContext(opponent_id="opp_1")
+    assert strategy.choose_action(context) == Action.COOPERATE
+
+
+def test_grim_trigger_continues_cooperating_if_opponent_cooperates():
+    """Verify GrimTrigger continues cooperating as long as opponent cooperates."""
+    from the_dilemma_experiment.strategies.grim_trigger import GrimTriggerStrategy
+
+    strategy = GrimTriggerStrategy()
+    context = DecisionContext(opponent_id="opp_1")
+
+    for _ in range(5):
+        assert strategy.choose_action(context) == Action.COOPERATE
+        strategy.observe("opp_1", Action.COOPERATE)
+
+
+def test_grim_trigger_defects_permanently_after_single_defection():
+    """Verify GrimTrigger permanently defects against an opponent who defected once."""
+    from the_dilemma_experiment.strategies.grim_trigger import GrimTriggerStrategy
+
+    strategy = GrimTriggerStrategy()
+    context = DecisionContext(opponent_id="traitor")
+
+    assert strategy.choose_action(context) == Action.COOPERATE
+    # Opponent defects
+    strategy.observe("traitor", Action.DEFECT)
+
+    # GrimTrigger must now defect permanently, even if opponent subsequently cooperates
+    assert strategy.choose_action(context) == Action.DEFECT
+    strategy.observe("traitor", Action.COOPERATE)
+    assert strategy.choose_action(context) == Action.DEFECT
+    strategy.observe("traitor", Action.COOPERATE)
+    assert strategy.choose_action(context) == Action.DEFECT
+
+
+def test_grim_trigger_opponent_isolation():
+    """Verify GrimTrigger isolates betrayal history by opponent_id per ADR-014."""
+    from the_dilemma_experiment.strategies.grim_trigger import GrimTriggerStrategy
+
+    strategy = GrimTriggerStrategy()
+    context_a = DecisionContext(opponent_id="bad_agent")
+    context_b = DecisionContext(opponent_id="good_agent")
+
+    # Opponent A defects
+    strategy.observe("bad_agent", Action.DEFECT)
+
+    # GrimTrigger defects against Opponent A
+    assert strategy.choose_action(context_a) == Action.DEFECT
+
+    # But still cooperates with Opponent B who never defected
+    assert strategy.choose_action(context_b) == Action.COOPERATE
+
+
+def test_grim_trigger_match_against_always_defect():
+    """Verify GrimTrigger against AlwaysDefect in a 3-round match."""
+    from the_dilemma_experiment.strategies.grim_trigger import GrimTriggerStrategy
+
+    grim_agent = Agent("grim", GrimTriggerStrategy())
+    defect_agent = Agent("defector", AlwaysDefectStrategy())
+    game = PrisonersDilemma()
+
+    match = Match(grim_agent, defect_agent, game, round_count=3)
+    rounds = match.execute()
+
+    # Round 1: Grim cooperates, Defector defects -> Payoff (0, 5)
+    assert rounds[0].first_action == Action.COOPERATE
+    assert rounds[0].second_action == Action.DEFECT
+    assert (rounds[0].payoff.first, rounds[0].payoff.second) == (0, 5)
+
+    # Round 2 & 3: Grim retaliates by defecting forever -> Payoff (1, 1)
+    assert rounds[1].first_action == Action.DEFECT
+    assert rounds[1].second_action == Action.DEFECT
+    assert (rounds[1].payoff.first, rounds[1].payoff.second) == (1, 1)
+
+    assert rounds[2].first_action == Action.DEFECT
+    assert rounds[2].second_action == Action.DEFECT
+    assert (rounds[2].payoff.first, rounds[2].payoff.second) == (1, 1)
+
+    assert match.result.first_score == 2
+    assert match.result.second_score == 7
+
