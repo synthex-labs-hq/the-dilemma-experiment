@@ -8,9 +8,7 @@ Usage:
     python experiments/episode_01/demo_cli.py
 """
 
-import sys
 import time
-from typing import Optional
 
 from the_dilemma_experiment.domain.action import Action
 from the_dilemma_experiment.domain.agent import Agent

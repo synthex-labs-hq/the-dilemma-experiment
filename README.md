@@ -8,25 +8,23 @@ The Dilemma Experiment is a reproducible simulation project exploring cooperatio
 
 The project begins with the repeated Prisoner's Dilemma and will evolve through a series of experiments.
 
-## Episode 1 — Can Cooperation Survive?
+## Episodes
 
-Read the detailed narrative:
-- [Episode 1 — Building the Laboratory](docs/episodes/01-building-the-laboratory.md)
+- [Episode 1 — Building the Laboratory: Can Cooperation Survive?](docs/episodes/01-building-the-laboratory.md)
+- [Episode 2 — The Tournament: When Selfish Agents Form a Society](docs/episodes/02-the-tournament.md)
 
-The first experiment explores how different strategies behave when repeatedly interacting in the Prisoner's Dilemma.
+### Implemented Strategies:
 
-Initial strategies:
-
-- Always Cooperate
-- Always Defect
-- Tit-for-Tat
-- Random
+- `AlwaysCooperateStrategy` (The Altruist)
+- `AlwaysDefectStrategy` (The Predator)
+- `TitForTatStrategy` (The Reciprocal Enforcer)
+- `GrimTriggerStrategy` (The Unforgiving Grudger)
+- `RandomStrategy` (The Chaos Agent)
 
 ## Project Status
 
-🚧 Early development
-
-Episode 1 is currently being built.
+- **Episode 1**: Completed & tagged at `v0.1.0-episode-1`
+- **Episode 2**: Completed on `feat/episode-2-the-tournament` (102 passing unit tests)
 
 ## Development
 

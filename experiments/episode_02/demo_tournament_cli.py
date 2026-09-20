@@ -8,7 +8,6 @@ Usage:
     uv run python experiments/episode_02/demo_tournament_cli.py
 """
 
-import sys
 import time
 
 from the_dilemma_experiment.domain.action import Action
@@ -171,7 +170,7 @@ def run_cinematic_tournament():
     print(f"  {BOLD}THE AXELROD PARADOX IN ACTION:{RESET}")
     print(f"  Notice: {BOLD}AlwaysDefect{RESET} won the most direct match duels ({result.get_entry('AlwaysDefect').wins} wins),")
     print(f"  YET {BOLD}GrimTrigger{RESET} & {BOLD}TitForTat{RESET} accumulate top cumulative utility by sustaining")
-    print(f"  mutual cooperation without succumbing to endless exploitation.")
+    print("  mutual cooperation without succumbing to endless exploitation.")
     print(f"  {DIM}Population Cooperation Rate:{RESET} {BOLD}{result.population_cooperation_rate * 100:.1f}%{RESET}")
     print(f"{CYAN}──────────────────────────────────────────────────────────────────────────────{RESET}\n")
 

@@ -7,15 +7,16 @@ and renders a polished, ready-to-upload MP4 (1080x1920) for YouTube Shorts and I
 
 import os
 import subprocess
-import sys
+
 import imageio_ffmpeg
+
 
 def get_ffmpeg():
     return imageio_ffmpeg.get_ffmpeg_exe()
 
 def run_cmd(cmd):
     print("Running:", " ".join(cmd[:6]), "...")
-    res = subprocess.run(cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+    res = subprocess.run(cmd, capture_output=True, check=False)
     if res.returncode != 0:
         print("Error executing command:", res.stderr.decode()[-500:])
         raise RuntimeError(f"FFmpeg failed with returncode {res.returncode}")
@@ -50,7 +51,7 @@ def main():
     probe_cmd = [
         ffmpeg, "-i", trimmed_audio
     ]
-    probe_res = subprocess.run(probe_cmd, stderr=subprocess.PIPE, stdout=subprocess.PIPE).stderr.decode()
+    probe_res = subprocess.run(probe_cmd, capture_output=True, check=False).stderr.decode()
     dur_line = [l for l in probe_res.splitlines() if "Duration:" in l]
     print("Trimmed Audio Duration:", dur_line[0] if dur_line else "Unknown")
 
