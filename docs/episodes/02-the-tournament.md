@@ -26,24 +26,29 @@ However, a two-player duel is not an ecosystem.
 In **Episode 2: The Tournament**, we scale our domain core from isolated pairs into a multi-agent simulation engine. We introduce an immutable `Population` registry, an atomic round-robin `Tournament` scheduler, aggregate metrics calculation, and two new behavioral archetypes (`GrimTriggerStrategy` and `RandomStrategy`).
 
 ```
-        ┌────────────────────────────────┐
-        │           Population           │ ── Validates uniqueness & strategy isolation
-        └───────────────┬────────────────┘
-                        │
-                        ▼
-        ┌────────────────────────────────┐
-        │           Tournament           │ ── Schedules round-robin pairings N*(N-1)/2
-        └───────────────┬────────────────┘
-                        │ executes repeated Match instances
-                        ▼
-        ┌────────────────────────────────┐
-        │        TournamentResult        │ ── Aggregates scores, wins/losses, coop rates
-        └───────────────┬────────────────┘
-                        │
-                        ▼
-        ┌────────────────────────────────┐
-        │        LeaderboardEntry        │ ── Immutable ranked standings
-        └────────────────────────────────┘
+┌──────────────────────────────────────┐
+│              Population              │
+│  (Uniqueness & strategy isolation)   │
+└──────────────────┬───────────────────┘
+                   │
+                   ▼
+┌──────────────────────────────────────┐
+│              Tournament              │
+│  (Schedules N*(N-1)/2 match duels)   │
+└──────────────────┬───────────────────┘
+                   │ executes repeated
+                   │ Match instances
+                   ▼
+┌──────────────────────────────────────┐
+│           TournamentResult           │
+│   (Scores, W/T/L, & coop rates)      │
+└──────────────────┬───────────────────┘
+                   │
+                   ▼
+┌──────────────────────────────────────┐
+│           LeaderboardEntry           │
+│     (Immutable ranked standings)     │
+└──────────────────────────────────────┘
 ```
 
 ---
