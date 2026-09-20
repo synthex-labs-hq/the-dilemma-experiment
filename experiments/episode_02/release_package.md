@@ -101,10 +101,33 @@ Full technical writeup and code in comments below.
 
 ---
 
-## 4. Medium Publishing Strategy
+## 4. Hashnode Publishing Metadata
 
+- **Article Title**: `Building a Multi-Agent Tournament Engine: Simulating Emergent Cooperation in Python`
+- **Subtitle**: `Scaling from 1v1 duels to an autonomous round-robin society using clean domain-driven architecture and deterministic testing.`
+- **Slug**: `episode-2-multi-agent-tournament-engine-python`
+- **SEO Title**: `Building a Multi-Agent Tournament Engine in Python` *(51 chars)*
+- **SEO Description**: `Simulating emergent cooperation in a multi-agent society. How to build a round-robin tournament engine in Python with clean architecture and 102 tests.` *(154 chars)*
+- **Tags (5)**: `python`, `artificial-intelligence`, `software-architecture`, `game-theory`, `open-source`
+- **Cover Image Asset**: `docs/episodes/images/ep2_hashnode_cover.jpg`
+
+---
+
+## 5. Medium Publishing Metadata & Strategy
+
+- **Story Title**: `We Trapped 5 Game Theory AIs in a Room. The Results Broke Our Assumptions.`
+- **Subtitle**: `Why winning every battle is the fastest way to lose the war—and what 2,250 simulated interactions teach us about trust and algorithms.`
+- **Custom Story URL Slug**: `we-trapped-5-game-theory-ais-in-a-room`
+- **SEO Title**: `We Trapped 5 Game Theory AIs in a Room: The Axelrod Paradox` *(59 chars)*
+- **SEO Description**: `What happens when 5 autonomous AI archetypes compete in a round-robin tournament? The predator won every duel, but lost the war. Here's why.` *(142 chars)*
+- **Topic Tags (5)**: `Artificial Intelligence`, `Game Theory`, `Software Development`, `Technology`, `Philosophy`
+- **Canonical Link**: `https://techecho.hashnode.dev/episode-2-multi-agent-tournament-engine-python` *(Paste into Advanced Settings to protect Hashnode SEO)*
+- **Hero Image Asset**: `docs/episodes/images/ep2_medium_cover.jpg`
+
+### Fast Publishing Workflow:
 1. Go to Medium → Click Profile → **"Stories"** → **"Import a story"**.
-2. Paste your Hashnode article URL. Medium will import the full markdown and automatically set the **canonical URL** to Hashnode (preserving 100% SEO authority for your domain).
-3. Insert **Prompt 1** concept art at the top as the Hero Image.
-4. Insert **Prompt 2** and **Prompt 3** concept art between sections to break up technical tables.
-5. Publish to tech/programming publications (e.g., *Towards Data Science*, *Better Programming*, or your personal publication).
+2. Paste your published Hashnode article URL (`https://techecho.hashnode.dev/episode-2-multi-agent-tournament-engine-python`). Medium will import the full markdown and automatically set the canonical URL.
+3. Replace the cover with `docs/episodes/images/ep2_medium_cover.jpg`.
+4. Insert `docs/episodes/images/ep2_grudger_wall.jpg` under "The Tragedy of the Unforgiving".
+5. Insert `docs/episodes/images/ep2_cooperative_society.jpg` under "The Axelrod Paradox".
+6. In **Story Settings**, set the custom URL slug and topic tags listed above, then publish.

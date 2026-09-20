@@ -12,6 +12,15 @@ This document contains publication-ready scripts tailored for each distribution 
 **Target Audience**: Software Engineers, AI/ML Engineers, Systems Architects.  
 **Tone**: Technical, rigorous, clean, open-source first.
 
+> ### 📋 Hashnode Publishing Metadata
+> - **Article Title**: `Building a Multi-Agent Tournament Engine: Simulating Emergent Cooperation in Python`
+> - **Subtitle**: `Scaling from 1v1 duels to an autonomous round-robin society using clean domain-driven architecture and deterministic testing.`
+> - **Article Slug**: `episode-2-multi-agent-tournament-engine-python`
+> - **SEO Title**: `Building a Multi-Agent Tournament Engine in Python` *(51 characters)*
+> - **SEO Description**: `Simulating emergent cooperation in a multi-agent society. How to build a round-robin tournament engine in Python with clean architecture and 102 tests.` *(154 characters)*
+> - **Tags (5)**: `python`, `artificial-intelligence`, `software-architecture`, `game-theory`, `open-source`
+> - **Cover Image Asset**: [`docs/episodes/images/ep2_hashnode_cover.jpg`](images/ep2_hashnode_cover.jpg)
+
 ---
 
 # Building a Multi-Agent Tournament Engine: Simulating Emergent Cooperation in Python
@@ -25,30 +34,30 @@ However, a two-player duel is not an ecosystem.
 
 In **Episode 2: The Tournament**, we scale our domain core from isolated pairs into a multi-agent simulation engine. We introduce an immutable `Population` registry, an atomic round-robin `Tournament` scheduler, aggregate metrics calculation, and two new behavioral archetypes (`GrimTriggerStrategy` and `RandomStrategy`).
 
-```
-┌──────────────────────────────────────┐
-│              Population              │
-│  (Uniqueness & strategy isolation)   │
-└──────────────────┬───────────────────┘
-                   │
-                   ▼
-┌──────────────────────────────────────┐
-│              Tournament              │
-│  (Schedules N*(N-1)/2 match duels)   │
-└──────────────────┬───────────────────┘
-                   │ executes repeated
-                   │ Match instances
-                   ▼
-┌──────────────────────────────────────┐
-│           TournamentResult           │
-│   (Scores, W/T/L, & coop rates)      │
-└──────────────────┬───────────────────┘
-                   │
-                   ▼
-┌──────────────────────────────────────┐
-│           LeaderboardEntry           │
-│     (Immutable ranked standings)     │
-└──────────────────────────────────────┘
+```text
++--------------------------------------------------+
+|                    POPULATION                    |
+|       (Uniqueness & strategy isolation)          |
++------------------------+-------------------------+
+                         |
+                         v
++------------------------+-------------------------+
+|                    TOURNAMENT                    |
+|       (Schedules N*(N-1)/2 match duels)          |
++------------------------+-------------------------+
+                         | executes repeated
+                         | Match instances
+                         v
++------------------------+-------------------------+
+|                TOURNAMENT RESULT                 |
+|          (Scores, W/T/L, & coop rates)           |
++------------------------+-------------------------+
+                         |
+                         v
++--------------------------------------------------+
+|                LEADERBOARD ENTRY                 |
+|           (Immutable ranked standings)           |
++--------------------------------------------------+
 ```
 
 ---
@@ -183,6 +192,16 @@ Repository: [synthex-labs-hq/the-dilemma-experiment](https://github.com/synthex-
 **Target Audience**: Tech Enthusiasts, Startup Founders, AI Researchers, Product Thinkers.  
 **Tone**: Engaging, narrative-driven, philosophical, thought-provoking.
 
+> ### 📋 Medium Publishing Metadata
+> - **Story Title**: `We Trapped 5 Game Theory AIs in a Room. The Results Broke Our Assumptions.`
+> - **Subtitle**: `Why winning every battle is the fastest way to lose the war—and what 2,250 simulated interactions teach us about trust and algorithms.`
+> - **Custom Story URL (Slug)**: `we-trapped-5-game-theory-ais-in-a-room`
+> - **SEO Title**: `We Trapped 5 Game Theory AIs in a Room: The Axelrod Paradox` *(59 characters)*
+> - **SEO Description**: `What happens when 5 autonomous AI archetypes compete in a round-robin tournament? The predator won every duel, but lost the war. Here's why.` *(142 characters)*
+> - **Topic Tags (5)**: `Artificial Intelligence`, `Game Theory`, `Software Development`, `Technology`, `Philosophy`
+> - **Canonical Link (Advanced Settings)**: `https://techecho.hashnode.dev/episode-2-multi-agent-tournament-engine-python` *(Protects 100% SEO for Hashnode)*
+> - **Hero Image Asset**: [`docs/episodes/images/ep2_medium_cover.jpg`](images/ep2_medium_cover.jpg)
+
 ---
 
 # We Trapped 5 Game Theory AIs in a Room. The Results Broke Our Assumptions.
@@ -304,6 +323,13 @@ Stay tuned.
 
 **Target Audience**: Tech Founders, Engineering Leaders, AI Practitioners.  
 **Format**: High-signal, executive takeaway with direct references to Hashnode & Medium.
+
+> ### 📋 LinkedIn Publishing Metadata
+> - **Post Topic**: Systems Thinking & Multi-Agent Game Theory
+> - **Headline Hook**: `In game theory, there is a counter-intuitive paradox: "You don't need to defeat your counterpart to win the tournament."`
+> - **Primary Hashtags (6)**: `#softwareengineering`, `#gametheory`, `#multiagentsystems`, `#python`, `#ai`, `#systemdesign`
+> - **Image Attachment**: [`docs/episodes/images/ep2_linkedin_post.jpg`](images/ep2_linkedin_post.jpg) *(1:1 Square)*
+> - **Target Audience**: Engineering Leaders, Multi-Agent AI Researchers, Tech Founders
 
 ---
 
