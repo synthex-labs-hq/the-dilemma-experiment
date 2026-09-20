@@ -232,6 +232,7 @@ def test_random_strategy_is_concrete_strategy():
 def test_random_strategy_probability_validation():
     """Verify RandomStrategy raises ValueError when probability is out of bounds."""
     import pytest
+
     from the_dilemma_experiment.strategies.random_strategy import RandomStrategy
 
     with pytest.raises(ValueError, match="cooperation_probability must be between 0.0 and 1.0"):
