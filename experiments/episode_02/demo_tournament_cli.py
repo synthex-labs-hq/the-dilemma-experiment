@@ -68,7 +68,7 @@ def print_banner():
 ╚══════════════════════════════════════════════════════════════════════╝{RESET}
 """
     print(banner)
-    time.sleep(0.8)
+    time.sleep(1.2)
 
 
 def format_action(action: Action) -> str:
@@ -81,7 +81,7 @@ def run_cinematic_tournament():
     print_banner()
 
     print(f"{BOLD}{WHITE}>>> INITIALIZING MULTI-AGENT POPULATION...{RESET}")
-    time.sleep(0.5)
+    time.sleep(0.6)
 
     archetypes = [
         ("AlwaysCooperate", AlwaysCooperateStrategy(), "The Altruist", CYAN),
@@ -95,7 +95,7 @@ def run_cinematic_tournament():
     for name, strat, archetype, color in archetypes:
         print(f"  • Registered Agent: {color}{BOLD}{name:<16}{RESET} [{archetype}]")
         agents.append(Agent(name, strat))
-        time.sleep(0.3)
+        time.sleep(0.5)
 
     print(f"\n{BOLD}{WHITE}>>> SCHEDULING ROUND-ROBIN TOURNAMENT...{RESET}")
     game = PrisonersDilemma()
@@ -111,7 +111,7 @@ def run_cinematic_tournament():
     print(f"\n{MAGENTA}━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━{RESET}")
     print(f"{BOLD}{WHITE}                  L I V E   M A T C H   T I C K E R                   {RESET}")
     print(f"{MAGENTA}━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━{RESET}\n")
-    time.sleep(0.8)
+    time.sleep(1.2)
 
     # Execute tournament
     result = tournament.execute()
@@ -134,12 +134,12 @@ def run_cinematic_tournament():
             f"│ {BOLD}{s1:3d}{RESET}-{BOLD}{s2:3d}{RESET} "
             f"│ {outcome_badge}"
         )
-        time.sleep(0.4)
+        time.sleep(0.85)
 
     print(f"\n{MAGENTA}━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━{RESET}")
     print(f"{BOLD}{WHITE}              F I N A L   T O U R N A M E N T   P O D I U M           {RESET}")
     print(f"{MAGENTA}━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━{RESET}\n")
-    time.sleep(0.8)
+    time.sleep(1.2)
 
     print(
         f"  {BOLD}{'RANK':<6} {'AGENT':<18} {'TOTAL':<8} {'AVG/RND':<9} {'W-T-L':<9} {'COOP RATE':<10}{RESET}"
@@ -162,9 +162,9 @@ def run_cinematic_tournament():
             f"{wtl:<9} "
             f"{CYAN}{coop_pct:<10}{RESET}"
         )
-        time.sleep(0.4)
+        time.sleep(0.85)
 
-    time.sleep(0.8)
+    time.sleep(1.2)
     print(f"\n{CYAN}──────────────────────────────────────────────────────────────────────{RESET}")
     print(f"  {BOLD}THE AXELROD PARADOX IN ACTION:{RESET}")
     print(f"  • {BOLD}AlwaysDefect{RESET} won the most direct match duels ({result.get_entry('AlwaysDefect').wins} wins),")
@@ -172,6 +172,7 @@ def run_cinematic_tournament():
     print("  • Reciprocal agents achieve compounding wealth through mutual cooperation.")
     print(f"  • {DIM}Population Cooperation Rate:{RESET} {BOLD}{result.population_cooperation_rate * 100:.1f}%{RESET}")
     print(f"{CYAN}──────────────────────────────────────────────────────────────────────{RESET}\n")
+    time.sleep(4.0)
 
 
 if __name__ == "__main__":
