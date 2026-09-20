@@ -1,0 +1,247 @@
+{
+  "experiment_1": {
+    "experiment_name": "5_archetype_round_robin",
+    "rounds_per_match": 50,
+    "total_matches": 10,
+    "total_rounds": 500,
+    "population_cooperation_rate": 0.53,
+    "leaderboard": [
+      {
+        "rank": 1,
+        "agent_id": "GrimTrigger",
+        "strategy": "GrimTriggerStrategy",
+        "total_score": 514,
+        "avg_score_per_round": 2.57,
+        "wins": 1,
+        "ties": 2,
+        "losses": 1,
+        "cooperations": 102,
+        "defections": 98,
+        "cooperation_rate": 0.51
+      },
+      {
+        "rank": 2,
+        "agent_id": "AlwaysDefect",
+        "strategy": "AlwaysDefectStrategy",
+        "total_score": 508,
+        "avg_score_per_round": 2.54,
+        "wins": 4,
+        "ties": 0,
+        "losses": 0,
+        "cooperations": 0,
+        "defections": 200,
+        "cooperation_rate": 0.0
+      },
+      {
+        "rank": 3,
+        "agent_id": "TitForTat",
+        "strategy": "TitForTatStrategy",
+        "total_score": 460,
+        "avg_score_per_round": 2.3,
+        "wins": 0,
+        "ties": 3,
+        "losses": 1,
+        "cooperations": 125,
+        "defections": 75,
+        "cooperation_rate": 0.625
+      },
+      {
+        "rank": 4,
+        "agent_id": "AlwaysCooperate",
+        "strategy": "AlwaysCooperateStrategy",
+        "total_score": 375,
+        "avg_score_per_round": 1.875,
+        "wins": 0,
+        "ties": 2,
+        "losses": 2,
+        "cooperations": 200,
+        "defections": 0,
+        "cooperation_rate": 1.0
+      },
+      {
+        "rank": 5,
+        "agent_id": "Random",
+        "strategy": "RandomStrategy",
+        "total_score": 361,
+        "avg_score_per_round": 1.805,
+        "wins": 1,
+        "ties": 1,
+        "losses": 2,
+        "cooperations": 103,
+        "defections": 97,
+        "cooperation_rate": 0.515
+      }
+    ],
+    "pairwise_scores": {
+      "AlwaysCooperate": {
+        "AlwaysDefect": 0,
+        "TitForTat": 150,
+        "GrimTrigger": 150,
+        "Random": 75
+      },
+      "AlwaysDefect": {
+        "AlwaysCooperate": 250,
+        "TitForTat": 54,
+        "GrimTrigger": 54,
+        "Random": 150
+      },
+      "TitForTat": {
+        "AlwaysCooperate": 150,
+        "AlwaysDefect": 49,
+        "GrimTrigger": 150,
+        "Random": 111
+      },
+      "GrimTrigger": {
+        "AlwaysCooperate": 150,
+        "AlwaysDefect": 49,
+        "TitForTat": 150,
+        "Random": 165
+      },
+      "Random": {
+        "AlwaysCooperate": 200,
+        "AlwaysDefect": 25,
+        "TitForTat": 111,
+        "GrimTrigger": 25
+      }
+    }
+  },
+  "experiment_2": {
+    "experiment_name": "10_agent_society",
+    "rounds_per_match": 50,
+    "total_matches": 45,
+    "total_rounds": 2250,
+    "population_cooperation_rate": 0.6016,
+    "leaderboard": [
+      {
+        "rank": 1,
+        "agent_id": "Grim_1",
+        "strategy": "GrimTriggerStrategy",
+        "total_score": 1163,
+        "avg_score_per_round": 2.5844,
+        "wins": 1,
+        "ties": 6,
+        "losses": 2,
+        "cooperations": 303,
+        "defections": 147,
+        "cooperation_rate": 0.6733
+      },
+      {
+        "rank": 2,
+        "agent_id": "Grim_2",
+        "strategy": "GrimTriggerStrategy",
+        "total_score": 1139,
+        "avg_score_per_round": 2.5311,
+        "wins": 1,
+        "ties": 6,
+        "losses": 2,
+        "cooperations": 303,
+        "defections": 147,
+        "cooperation_rate": 0.6733
+      },
+      {
+        "rank": 3,
+        "agent_id": "TFT_Gamma",
+        "strategy": "TitForTatStrategy",
+        "total_score": 1109,
+        "avg_score_per_round": 2.4644,
+        "wins": 0,
+        "ties": 7,
+        "losses": 2,
+        "cooperations": 326,
+        "defections": 124,
+        "cooperation_rate": 0.7244
+      },
+      {
+        "rank": 4,
+        "agent_id": "TFT_Alpha",
+        "strategy": "TitForTatStrategy",
+        "total_score": 1108,
+        "avg_score_per_round": 2.4622,
+        "wins": 0,
+        "ties": 7,
+        "losses": 2,
+        "cooperations": 327,
+        "defections": 123,
+        "cooperation_rate": 0.7267
+      },
+      {
+        "rank": 5,
+        "agent_id": "TFT_Beta",
+        "strategy": "TitForTatStrategy",
+        "total_score": 1107,
+        "avg_score_per_round": 2.46,
+        "wins": 0,
+        "ties": 6,
+        "losses": 3,
+        "cooperations": 328,
+        "defections": 122,
+        "cooperation_rate": 0.7289
+      },
+      {
+        "rank": 6,
+        "agent_id": "Coop_1",
+        "strategy": "AlwaysCooperateStrategy",
+        "total_score": 975,
+        "avg_score_per_round": 2.1667,
+        "wins": 0,
+        "ties": 6,
+        "losses": 3,
+        "cooperations": 450,
+        "defections": 0,
+        "cooperation_rate": 1.0
+      },
+      {
+        "rank": 7,
+        "agent_id": "Defect_1",
+        "strategy": "AlwaysDefectStrategy",
+        "total_score": 970,
+        "avg_score_per_round": 2.1556,
+        "wins": 8,
+        "ties": 1,
+        "losses": 0,
+        "cooperations": 0,
+        "defections": 450,
+        "cooperation_rate": 0.0
+      },
+      {
+        "rank": 8,
+        "agent_id": "Coop_2",
+        "strategy": "AlwaysCooperateStrategy",
+        "total_score": 969,
+        "avg_score_per_round": 2.1533,
+        "wins": 0,
+        "ties": 6,
+        "losses": 3,
+        "cooperations": 450,
+        "defections": 0,
+        "cooperation_rate": 1.0
+      },
+      {
+        "rank": 9,
+        "agent_id": "Defect_2",
+        "strategy": "AlwaysDefectStrategy",
+        "total_score": 954,
+        "avg_score_per_round": 2.12,
+        "wins": 8,
+        "ties": 1,
+        "losses": 0,
+        "cooperations": 0,
+        "defections": 450,
+        "cooperation_rate": 0.0
+      },
+      {
+        "rank": 10,
+        "agent_id": "Random_1",
+        "strategy": "RandomStrategy",
+        "total_score": 849,
+        "avg_score_per_round": 1.8867,
+        "wins": 3,
+        "ties": 2,
+        "losses": 4,
+        "cooperations": 220,
+        "defections": 230,
+        "cooperation_rate": 0.4889
+      }
+    ]
+  }
+}

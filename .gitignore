@@ -217,4 +217,16 @@ __marimo__/
 # Streamlit
 .streamlit/secrets.toml
 
-experiments/*
+# Media assets in experiments directory (videos, audio, concept art)
+experiments/**/*.mp4
+experiments/**/*.webm
+experiments/**/*.mov
+experiments/**/*.avi
+experiments/**/*.mp3
+experiments/**/*.wav
+experiments/**/*.ogg
+experiments/**/*.jpg
+experiments/**/*.jpeg
+experiments/**/*.png
+experiments/**/*.webp
+experiments/**/*.srt
