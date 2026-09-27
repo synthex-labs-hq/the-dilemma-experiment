@@ -105,10 +105,7 @@ def test_population_membership_contains():
 
 def test_population_iteration():
     """Verify population is iterable in insertion order."""
-    agents = [
-        Agent(f"agent_{i}", AlwaysCooperateStrategy())
-        for i in range(5)
-    ]
+    agents = [Agent(f"agent_{i}", AlwaysCooperateStrategy()) for i in range(5)]
     pop = Population(agents)
 
     iterated = list(pop)

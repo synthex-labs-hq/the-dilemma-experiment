@@ -48,19 +48,21 @@ def run_archetype_tournament(rounds_per_match: int = 50, seed: int = 42) -> dict
 
     leaderboard_data = []
     for entry in result.leaderboard:
-        leaderboard_data.append({
-            "rank": entry.rank,
-            "agent_id": entry.agent_id,
-            "strategy": entry.strategy_name,
-            "total_score": entry.total_score,
-            "avg_score_per_round": entry.average_score_per_round,
-            "wins": entry.wins,
-            "ties": entry.ties,
-            "losses": entry.losses,
-            "cooperations": entry.cooperations,
-            "defections": entry.defections,
-            "cooperation_rate": entry.cooperation_rate,
-        })
+        leaderboard_data.append(
+            {
+                "rank": entry.rank,
+                "agent_id": entry.agent_id,
+                "strategy": entry.strategy_name,
+                "total_score": entry.total_score,
+                "avg_score_per_round": entry.average_score_per_round,
+                "wins": entry.wins,
+                "ties": entry.ties,
+                "losses": entry.losses,
+                "cooperations": entry.cooperations,
+                "defections": entry.defections,
+                "cooperation_rate": entry.cooperation_rate,
+            }
+        )
 
     # Build pairwise matrix
     pairwise: dict[str, dict[str, int]] = {a.id: {} for a in agents}
@@ -81,7 +83,9 @@ def run_archetype_tournament(rounds_per_match: int = 50, seed: int = 42) -> dict
     }
 
 
-def run_balanced_population_tournament(rounds_per_match: int = 50, seed: int = 42) -> dict:
+def run_balanced_population_tournament(
+    rounds_per_match: int = 50, seed: int = 42
+) -> dict:
     """Run tournament with a balanced society (3 TFT, 2 Grim, 2 Defect, 2 Coop, 1 Random)."""
     game = PrisonersDilemma()
 
@@ -104,19 +108,21 @@ def run_balanced_population_tournament(rounds_per_match: int = 50, seed: int = 4
 
     leaderboard_data = []
     for entry in result.leaderboard:
-        leaderboard_data.append({
-            "rank": entry.rank,
-            "agent_id": entry.agent_id,
-            "strategy": entry.strategy_name,
-            "total_score": entry.total_score,
-            "avg_score_per_round": entry.average_score_per_round,
-            "wins": entry.wins,
-            "ties": entry.ties,
-            "losses": entry.losses,
-            "cooperations": entry.cooperations,
-            "defections": entry.defections,
-            "cooperation_rate": entry.cooperation_rate,
-        })
+        leaderboard_data.append(
+            {
+                "rank": entry.rank,
+                "agent_id": entry.agent_id,
+                "strategy": entry.strategy_name,
+                "total_score": entry.total_score,
+                "avg_score_per_round": entry.average_score_per_round,
+                "wins": entry.wins,
+                "ties": entry.ties,
+                "losses": entry.losses,
+                "cooperations": entry.cooperations,
+                "defections": entry.defections,
+                "cooperation_rate": entry.cooperation_rate,
+            }
+        )
 
     return {
         "experiment_name": "10_agent_society",
@@ -149,20 +155,28 @@ def main():
     print("\n" + "=" * 80)
     print("EXPERIMENT 1 LEADERBOARD (5 Archetypes, 50 rounds/match):")
     print("=" * 80)
-    print(f"{'RANK':<5} | {'AGENT':<16} | {'SCORE':<7} | {'AVG/RND':<8} | {'W-T-L':<9} | {'COOP %':<7}")
+    print(
+        f"{'RANK':<5} | {'AGENT':<16} | {'SCORE':<7} | {'AVG/RND':<8} | {'W-T-L':<9} | {'COOP %':<7}"
+    )
     print("-" * 80)
     for row in exp1["leaderboard"]:
         wtl = f"{row['wins']}-{row['ties']}-{row['losses']}"
-        print(f"#{row['rank']:<4} | {row['agent_id']:<16} | {row['total_score']:<7} | {row['avg_score_per_round']:<8.2f} | {wtl:<9} | {row['cooperation_rate']*100:<6.1f}%")
+        print(
+            f"#{row['rank']:<4} | {row['agent_id']:<16} | {row['total_score']:<7} | {row['avg_score_per_round']:<8.2f} | {wtl:<9} | {row['cooperation_rate'] * 100:<6.1f}%"
+        )
 
     print("\n" + "=" * 80)
     print("EXPERIMENT 2 LEADERBOARD (10-Agent Society, 50 rounds/match):")
     print("=" * 80)
-    print(f"{'RANK':<5} | {'AGENT':<16} | {'SCORE':<7} | {'AVG/RND':<8} | {'W-T-L':<9} | {'COOP %':<7}")
+    print(
+        f"{'RANK':<5} | {'AGENT':<16} | {'SCORE':<7} | {'AVG/RND':<8} | {'W-T-L':<9} | {'COOP %':<7}"
+    )
     print("-" * 80)
     for row in exp2["leaderboard"]:
         wtl = f"{row['wins']}-{row['ties']}-{row['losses']}"
-        print(f"#{row['rank']:<4} | {row['agent_id']:<16} | {row['total_score']:<7} | {row['avg_score_per_round']:<8.2f} | {wtl:<9} | {row['cooperation_rate']*100:<6.1f}%")
+        print(
+            f"#{row['rank']:<4} | {row['agent_id']:<16} | {row['total_score']:<7} | {row['avg_score_per_round']:<8.2f} | {wtl:<9} | {row['cooperation_rate'] * 100:<6.1f}%"
+        )
 
 
 if __name__ == "__main__":

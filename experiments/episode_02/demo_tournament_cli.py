@@ -105,12 +105,22 @@ def run_cinematic_tournament():
 
     total_pairings = (len(agents) * (len(agents) - 1)) // 2
     print(f"  {DIM}Total Participants:{RESET} {BOLD}{len(agents)}{RESET}")
-    print(f"  {DIM}Matches Scheduled:{RESET}  {BOLD}{total_pairings}{RESET} round-robin duels")
+    print(
+        f"  {DIM}Matches Scheduled:{RESET}  {BOLD}{total_pairings}{RESET} round-robin duels"
+    )
     print(f"  {DIM}Rounds Per Match:{RESET}   {BOLD}{rounds}{RESET}")
-    print(f"  {DIM}Total Interactions:{RESET} {BOLD}{total_pairings * rounds}{RESET} rounds")
-    print(f"\n{MAGENTA}━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━{RESET}")
-    print(f"{BOLD}{WHITE}                  L I V E   M A T C H   T I C K E R                   {RESET}")
-    print(f"{MAGENTA}━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━{RESET}\n")
+    print(
+        f"  {DIM}Total Interactions:{RESET} {BOLD}{total_pairings * rounds}{RESET} rounds"
+    )
+    print(
+        f"\n{MAGENTA}━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━{RESET}"
+    )
+    print(
+        f"{BOLD}{WHITE}                  L I V E   M A T C H   T I C K E R                   {RESET}"
+    )
+    print(
+        f"{MAGENTA}━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━{RESET}\n"
+    )
     time.sleep(1.2)
 
     # Execute tournament
@@ -124,8 +134,10 @@ def run_cinematic_tournament():
         p1, p2 = res.first_agent_id, res.second_agent_id
         s1, s2 = res.first_score, res.second_score
 
-        outcome_badge = f"{GREEN}DRAW{RESET}" if s1 == s2 else (
-            f"{CYAN}{p1} WINS{RESET}" if s1 > s2 else f"{AMBER}{p2} WINS{RESET}"
+        outcome_badge = (
+            f"{GREEN}DRAW{RESET}"
+            if s1 == s2
+            else (f"{CYAN}{p1} WINS{RESET}" if s1 > s2 else f"{AMBER}{p2} WINS{RESET}")
         )
 
         print(
@@ -136,15 +148,23 @@ def run_cinematic_tournament():
         )
         time.sleep(0.85)
 
-    print(f"\n{MAGENTA}━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━{RESET}")
-    print(f"{BOLD}{WHITE}              F I N A L   T O U R N A M E N T   P O D I U M           {RESET}")
-    print(f"{MAGENTA}━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━{RESET}\n")
+    print(
+        f"\n{MAGENTA}━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━{RESET}"
+    )
+    print(
+        f"{BOLD}{WHITE}              F I N A L   T O U R N A M E N T   P O D I U M           {RESET}"
+    )
+    print(
+        f"{MAGENTA}━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━{RESET}\n"
+    )
     time.sleep(1.2)
 
     print(
         f"  {BOLD}{'RANK':<6} {'AGENT':<18} {'TOTAL':<8} {'AVG/RND':<9} {'W-T-L':<9} {'COOP RATE':<10}{RESET}"
     )
-    print(f"  {DIM}{'─'*6} {'─'*18} {'─'*8} {'─'*9} {'─'*9} {'─'*10}{RESET}")
+    print(
+        f"  {DIM}{'─' * 6} {'─' * 18} {'─' * 8} {'─' * 9} {'─' * 9} {'─' * 10}{RESET}"
+    )
 
     medals = ["🥇", "🥈", "🥉", "  ", "  "]
     for entry in result.leaderboard:
@@ -165,13 +185,25 @@ def run_cinematic_tournament():
         time.sleep(0.85)
 
     time.sleep(1.2)
-    print(f"\n{CYAN}──────────────────────────────────────────────────────────────────────{RESET}")
+    print(
+        f"\n{CYAN}──────────────────────────────────────────────────────────────────────{RESET}"
+    )
     print(f"  {BOLD}THE AXELROD PARADOX IN ACTION:{RESET}")
-    print(f"  • {BOLD}AlwaysDefect{RESET} won the most direct match duels ({result.get_entry('AlwaysDefect').wins} wins),")
-    print(f"    yet finished behind {BOLD}GrimTrigger{RESET} & {BOLD}TitForTat{RESET} in cumulative utility.")
-    print("  • Reciprocal agents achieve compounding wealth through mutual cooperation.")
-    print(f"  • {DIM}Population Cooperation Rate:{RESET} {BOLD}{result.population_cooperation_rate * 100:.1f}%{RESET}")
-    print(f"{CYAN}──────────────────────────────────────────────────────────────────────{RESET}\n")
+    print(
+        f"  • {BOLD}AlwaysDefect{RESET} won the most direct match duels ({result.get_entry('AlwaysDefect').wins} wins),"
+    )
+    print(
+        f"    yet finished behind {BOLD}GrimTrigger{RESET} & {BOLD}TitForTat{RESET} in cumulative utility."
+    )
+    print(
+        "  • Reciprocal agents achieve compounding wealth through mutual cooperation."
+    )
+    print(
+        f"  • {DIM}Population Cooperation Rate:{RESET} {BOLD}{result.population_cooperation_rate * 100:.1f}%{RESET}"
+    )
+    print(
+        f"{CYAN}──────────────────────────────────────────────────────────────────────{RESET}\n"
+    )
     time.sleep(4.0)
 
 

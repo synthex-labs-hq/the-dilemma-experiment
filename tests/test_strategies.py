@@ -235,10 +235,14 @@ def test_random_strategy_probability_validation():
 
     from the_dilemma_experiment.strategies.random_strategy import RandomStrategy
 
-    with pytest.raises(ValueError, match="cooperation_probability must be between 0.0 and 1.0"):
+    with pytest.raises(
+        ValueError, match="cooperation_probability must be between 0.0 and 1.0"
+    ):
         RandomStrategy(cooperation_probability=-0.1)
 
-    with pytest.raises(ValueError, match="cooperation_probability must be between 0.0 and 1.0"):
+    with pytest.raises(
+        ValueError, match="cooperation_probability must be between 0.0 and 1.0"
+    ):
         RandomStrategy(cooperation_probability=1.1)
 
 
@@ -378,4 +382,3 @@ def test_grim_trigger_match_against_always_defect():
 
     assert match.result.first_score == 2
     assert match.result.second_score == 7
-

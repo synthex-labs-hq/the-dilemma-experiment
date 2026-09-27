@@ -32,15 +32,22 @@ class TournamentResult:
         total_matches: int,
         total_rounds: int,
         population_cooperation_rate: float,
+        noise: float = 0.0,
     ) -> None:
         self._match_results = tuple(match_results)
         self._leaderboard = tuple(leaderboard)
         self._total_matches = total_matches
         self._total_rounds = total_rounds
         self._population_cooperation_rate = population_cooperation_rate
+        self._noise = float(noise)
         self._entries_by_agent: dict[str, LeaderboardEntry] = {
             entry.agent_id: entry for entry in self._leaderboard
         }
+
+    @property
+    def noise(self) -> float:
+        """The channel noise rate configured for this tournament."""
+        return self._noise
 
     @property
     def match_results(self) -> tuple[MatchResult, ...]:

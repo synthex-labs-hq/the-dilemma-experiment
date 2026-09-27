@@ -44,10 +44,7 @@ def test_tournament_round_robin_match_count():
     game = PrisonersDilemma()
 
     # N = 4 agents -> 4*3/2 = 6 matches
-    agents = [
-        Agent(f"agent_{i}", AlwaysCooperateStrategy())
-        for i in range(4)
-    ]
+    agents = [Agent(f"agent_{i}", AlwaysCooperateStrategy()) for i in range(4)]
     pop = Population(agents)
     tournament = Tournament(population=pop, game=game, rounds_per_match=3)
 
@@ -64,10 +61,12 @@ def test_tournament_round_robin_match_count():
 def test_tournament_reexecution_raises():
     """Verify executing an already completed tournament raises RuntimeError."""
     game = PrisonersDilemma()
-    pop = Population([
-        Agent("a1", AlwaysCooperateStrategy()),
-        Agent("a2", AlwaysDefectStrategy()),
-    ])
+    pop = Population(
+        [
+            Agent("a1", AlwaysCooperateStrategy()),
+            Agent("a2", AlwaysDefectStrategy()),
+        ]
+    )
     tournament = Tournament(pop, game, rounds_per_match=2)
     tournament.execute()
 
@@ -132,12 +131,14 @@ def test_tournament_cooperative_cluster_dominance():
     Result: Every TFT agent beats the Defector in total score!
     """
     game = PrisonersDilemma()
-    pop = Population([
-        Agent("defector", AlwaysDefectStrategy()),
-        Agent("tft_1", TitForTatStrategy()),
-        Agent("tft_2", TitForTatStrategy()),
-        Agent("tft_3", TitForTatStrategy()),
-    ])
+    pop = Population(
+        [
+            Agent("defector", AlwaysDefectStrategy()),
+            Agent("tft_1", TitForTatStrategy()),
+            Agent("tft_2", TitForTatStrategy()),
+            Agent("tft_3", TitForTatStrategy()),
+        ]
+    )
 
     tournament = Tournament(population=pop, game=game, rounds_per_match=10)
     result = tournament.execute()
@@ -164,11 +165,13 @@ def test_tournament_with_grim_trigger():
     GrimTrigger cooperates with TFT and Cooperate, but shuts down Defector after 1 round.
     """
     game = PrisonersDilemma()
-    pop = Population([
-        Agent("grim", GrimTriggerStrategy()),
-        Agent("tft", TitForTatStrategy()),
-        Agent("defect", AlwaysDefectStrategy()),
-    ])
+    pop = Population(
+        [
+            Agent("grim", GrimTriggerStrategy()),
+            Agent("tft", TitForTatStrategy()),
+            Agent("defect", AlwaysDefectStrategy()),
+        ]
+    )
 
     tournament = Tournament(population=pop, game=game, rounds_per_match=5)
     result = tournament.execute()
@@ -192,10 +195,12 @@ def test_tournament_with_grim_trigger():
 def test_tournament_cooperation_rate_metrics():
     """Verify individual and population cooperation rate calculations."""
     game = PrisonersDilemma()
-    pop = Population([
-        Agent("all_coop", AlwaysCooperateStrategy()),
-        Agent("all_defect", AlwaysDefectStrategy()),
-    ])
+    pop = Population(
+        [
+            Agent("all_coop", AlwaysCooperateStrategy()),
+            Agent("all_defect", AlwaysDefectStrategy()),
+        ]
+    )
 
     tournament = Tournament(pop, game, rounds_per_match=10)
     result = tournament.execute()

@@ -17,7 +17,9 @@ class Population:
 
         for agent in agents_tuple:
             if not isinstance(agent, Agent):
-                raise TypeError(f"All members of Population must be Agent instances, got {type(agent)}")
+                raise TypeError(
+                    f"All members of Population must be Agent instances, got {type(agent)}"
+                )
             if not agent.id or not isinstance(agent.id, str):
                 raise ValueError("Agent id must be a non-empty string")
             if agent.id in seen_ids:

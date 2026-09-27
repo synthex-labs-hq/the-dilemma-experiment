@@ -1,4 +1,5 @@
 import itertools
+import random
 from collections import defaultdict
 
 from the_dilemma_experiment.domain.action import Action
@@ -20,9 +21,13 @@ class Tournament:
         population: Population,
         game: Game,
         rounds_per_match: int,
+        noise: float = 0.0,
+        seed: int | None = None,
     ) -> None:
         if not isinstance(population, Population):
-            raise TypeError(f"population must be a Population instance, got {type(population)}")
+            raise TypeError(
+                f"population must be a Population instance, got {type(population)}"
+            )
         if population.size < 2:
             raise ValueError(
                 f"Tournament requires a population of at least 2 agents, got {population.size}"
@@ -30,11 +35,21 @@ class Tournament:
         if not isinstance(game, Game):
             raise TypeError(f"game must be a Game instance, got {type(game)}")
         if not isinstance(rounds_per_match, int) or rounds_per_match < 1:
-            raise ValueError(f"rounds_per_match must be an integer >= 1, got {rounds_per_match}")
+            raise ValueError(
+                f"rounds_per_match must be an integer >= 1, got {rounds_per_match}"
+            )
+        if isinstance(noise, bool) or not isinstance(noise, (float, int)):
+            raise TypeError("noise must be a float or int.")
+        if not (0.0 <= noise <= 1.0):
+            raise ValueError("noise must be between 0.0 and 1.0.")
+        if seed is not None and (isinstance(seed, bool) or not isinstance(seed, int)):
+            raise TypeError("seed must be an integer or None.")
 
         self._population = population
         self._game = game
         self._rounds_per_match = rounds_per_match
+        self._noise = float(noise)
+        self._seed = seed
         self._matches: tuple[Match, ...] = ()
         self._result: TournamentResult | None = None
         self._has_executed: bool = False
@@ -53,6 +68,16 @@ class Tournament:
     def rounds_per_match(self) -> int:
         """Number of repeated rounds played in each match."""
         return self._rounds_per_match
+
+    @property
+    def noise(self) -> float:
+        """The channel noise rate configured for this tournament."""
+        return self._noise
+
+    @property
+    def seed(self) -> int | None:
+        """The random seed configured for this tournament."""
+        return self._seed
 
     @property
     def matches(self) -> tuple[Match, ...]:
@@ -98,12 +123,16 @@ class Tournament:
             matches_played[agent.id] = 0
 
         # Execute each scheduled match
+        rng = random.Random(self._seed) if self._seed is not None else None
         for agent_a, agent_b in pairings:
+            match_seed = rng.randint(0, 2**31 - 1) if rng is not None else None
             match = Match(
                 first_agent=agent_a,
                 second_agent=agent_b,
                 game=self._game,
                 round_count=self._rounds_per_match,
+                noise=self._noise,
+                seed=match_seed,
             )
             completed_rounds = match.execute()
             res = match.result
@@ -186,6 +215,7 @@ class Tournament:
             total_matches=total_matches,
             total_rounds=total_rounds,
             population_cooperation_rate=round(population_coop_rate, 4),
+            noise=self._noise,
         )
 
         # Atomic commit
