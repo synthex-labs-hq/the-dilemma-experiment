@@ -107,31 +107,31 @@ The breakdown of classic Tit-for-Tat is even more insidious.
 Because Tit-for-Tat mirrors whatever its opponent did on the prior round, a single flipped bit triggers an alternating **Echo Vendetta Cycle** ($CD \leftrightarrow DC$):
 
 ```text
-Round 1-4:  [Agent Alpha: C] <──────────────> [Agent Beta: C]    --> Mutual Trust (+3 / +3)
-                   |                                  |
-Round 5:    [Alpha: Intends C]                        |
-                   | (⚡ 2% Noise Inversion)          |
-                   v                                  |
-            [Alpha: Plays D] ──(+5 vs 0)────────────> [Beta: Plays C]
-                   |                                  |
-Round 6:           | <──────────(Beta retaliates)──── [Beta: Plays D]
-            [Alpha: Plays C] <──(0 vs +5)─────────────┘
-                   |
-Round 7:    [Alpha: Retaliates] ────────────────────> [Beta: Plays C]
-            [Alpha: Plays D] ───(+5 vs 0)───────────> |
-                   |                                  |
-            ========================================================
-            RESULT: Endless Alternating Vendetta (CD <-> DC) Forever!
-            ========================================================
+Round 1–4:   [Agent Alpha: C] <─────────────────────> [Agent Beta: C]    --> Mutual Trust (+3 / +3)
+                    |                                        |
+Round 5:     [Alpha: Intends C]                              |
+                    | (⚡ 2% Noise Inversion)                |
+                    v                                        |
+             [Alpha: Transmits D] ───(+5 vs 0)─────────────> [Beta: Plays C]
+                    |                                        |
+Round 6:            | <──────────(Beta retaliates)────────── [Beta: Plays D]
+             [Alpha: Plays C] <──────(0 vs +5)───────────────┘
+                    |
+Round 7:     [Alpha: Retaliates] ──────────────────────────> [Beta: Plays C]
+             [Alpha: Plays D] ───────(+5 vs 0)─────────────> |
+                    |                                        |
+             ===========================================================
+             RESULT: Endless Alternating Vendetta (CD <-> DC) Forever!
+             ===========================================================
 ```
 
-| Round | Alpha (TFT) | Beta (TFT) | Channel Status | Payoff | Consequence |
+| Round | Alpha (TFT) | Beta (TFT) | Channel Transmission | Payoffs (A/B) | Dynamic / Consequence |
 | :---: | :---: | :---: | :--- | :---: | :--- |
-| **R1–4** | `COOPERATE` | `COOPERATE` | Clean transmission | `+3 / +3` | Stable mutual cooperation |
-| **R5** | **`DEFECT`** | `COOPERATE` | **⚡ Noise Flip (Alpha C ➔ D)** | `+5 / 0` | Beta feels betrayed |
-| **R6** | `COOPERATE` | **`DEFECT`** | Beta retaliates against R5 | `0 / +5` | Alpha feels betrayed |
-| **R7** | **`DEFECT`** | `COOPERATE` | Alpha retaliates against R6 | `+5 / 0` | The feud echoes back! |
-| **R8+** | `C ⇄ D` | `D ⇄ C` | Alternating Vendetta | `+2.5 avg` | Trust permanently broken |
+| **R1–4** | `COOPERATE` | `COOPERATE` | Clean transmission | `+3 / +3` | Stable mutual trust |
+| **R5** | **`DEFECT`** | `COOPERATE` | **⚡ Noise Flip (Alpha C ➔ D)** | `+5 / 0` | Beta observes defection |
+| **R6** | `COOPERATE` | **`DEFECT`** | Beta retaliates against R5 | `0 / +5` | Alpha observes defection |
+| **R7** | **`DEFECT`** | `COOPERATE` | Alpha retaliates against R6 | `+5 / 0` | The vendetta echoes back! |
+| **R8+** | `C ⇄ D` | `D ⇄ C` | Alternating Echo Cycle | `+2.5 avg` | **Trust permanently broken** |
 
 In a 50-round duel between two Tit-for-Tat agents under 2% noise:
 - Mutual cooperation occurred in **only 9 rounds**.
@@ -206,30 +206,30 @@ Discovered by Martin Nowak and Karl Sigmund in 1993:
   - **Lose** (payoff was unsatisfying: $CD \to 0$ or $DD \to +1$): **SHIFT** to the opposite action.
 
 ```text
-Round 1:   [Pavlov Alpha: C] <───────────────────> [Pavlov Beta: C]   --> Win! Both STAY on C
-                  |                                       |
-Round 2:   [Alpha: Intends C]                             |
-                  | (⚡ Noise Inversion)                  |
-                  v                                       |
-           [Alpha: Plays D] ──────(+5 vs 0)─────────────> [Beta: Plays C]
-                  |                                       |
-                  | Alpha: got +5 (Win!) --> STAY on D    | Beta: got 0 (Loss!) --> SHIFT to D
-                  v                                       v
-Round 3:   [Alpha: Plays D] <─────(+1 vs +1)────────────> [Beta: Plays D]
-                  |                                       |
-                  | Alpha: got +1 (Loss!) --> SHIFT to C  | Beta: got +1 (Loss!) --> SHIFT to C
-                  v                                       v
-Round 4:   [Alpha: Plays C] <─────(+3 vs +3)────────────> [Pavlov Beta: C]
-                  |                                       |
-           =======================================================================
+Round 1:   [Pavlov Alpha: C] <─────────────────────> [Pavlov Beta: C]   --> Win! Both STAY on C
+                  |                                         |
+Round 2:   [Alpha: Intends C]                               |
+                  | (⚡ Noise Inversion)                    |
+                  v                                         |
+           [Alpha: Transmits D] ────(+5 vs 0)─────────────> [Beta: Plays C]
+                  |                                         |
+                  | Alpha: got +5 (Win!) --> STAY on D      | Beta: got 0 (Loss!) --> SHIFT to D
+                  v                                         v
+Round 3:   [Alpha: Plays D] <───────(+1 vs +1)────────────> [Beta: Plays D]
+                  |                                         |
+                  | Alpha: got +1 (Loss!) --> SHIFT to C    | Beta: got +1 (Loss!) --> SHIFT to C
+                  v                                         v
+Round 4:   [Alpha: Plays C] <───────(+3 vs +3)────────────> [Pavlov Beta: C]
+                  |                                         |
+           =========================================================================
            RESULT: ✨ HEALED! Restored to Mutual Cooperation in exactly 2 rounds!
-           =======================================================================
+           =========================================================================
 ```
 
-| Round | Alpha Decision | Beta Decision | Executed Actions | Payoffs | Alpha Reflex | Beta Reflex | Outcome |
+| Round | Alpha Intent | Beta Intent | Transmitted | Payoffs (A/B) | Alpha Reflex | Beta Reflex | Outcome |
 | :---: | :--- | :--- | :---: | :---: | :--- | :--- | :--- |
 | **R1** | `COOPERATE` | `COOPERATE` | `C / C` | `+3 / +3` | Satisfied ($\ge 3$) ➔ **STAY** | Satisfied ($\ge 3$) ➔ **STAY** | Mutual Trust |
-| **R2** | `COOPERATE` *(flipped)* | `COOPERATE` | **`D / C`** | `+5 / 0` | Got $+5$ (Win!) ➔ **STAY on D** | Got $0$ (Loss!) ➔ **SHIFT to D** | ⚡ Noise Glitch |
+| **R2** | `COOPERATE` | `COOPERATE` | **`D / C`** | `+5 / 0` | Got $+5$ (Win!) ➔ **STAY on D** | Got $0$ (Loss!) ➔ **SHIFT to D** | ⚡ Noise Glitch |
 | **R3** | Stay on `D` | Shift to `D` | `D / D` | `+1 / +1` | Got $+1$ (Loss!) ➔ **SHIFT to C** | Got $+1$ (Loss!) ➔ **SHIFT to C** | Mutual Punishment |
 | **R4** | Shift to `C` | Shift to `C` | **`C / C`** | `+3 / +3` | Got $+3$ (Win!) ➔ **STAY on C** | Got $+3$ (Win!) ➔ **STAY on C** | **✨ Fully Healed!** |
 
