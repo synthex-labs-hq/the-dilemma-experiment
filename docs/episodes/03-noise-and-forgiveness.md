@@ -106,36 +106,32 @@ The breakdown of classic Tit-for-Tat is even more insidious.
 
 Because Tit-for-Tat mirrors whatever its opponent did on the prior round, a single flipped bit triggers an alternating **Echo Vendetta Cycle** ($CD \leftrightarrow DC$):
 
-```mermaid
-sequenceDiagram
-    autonumber
-    participant A as Agent Alpha (TFT)
-    participant Channel as Noisy Channel (e = 2%)
-    participant B as Agent Beta (TFT)
-
-    Note over A,B: Round 1 to 4: Peaceful mutual cooperation (C, C) -> +3 / +3
-    A->>Channel: Intends COOPERATE
-    Channel-->>B: ⚡ Glitch! Inverts to DEFECT
-    B->>Channel: Intends COOPERATE
-    Channel-->>A: Transmits COOPERATE
-    Note over A,B: Round 5: Alpha played D (glitch), Beta played C. Payoffs: (+5, 0)
-
-    Note over A,B: Round 6: The Echo Begins!
-    A->>Channel: Mirrors Beta's R5 move -> COOPERATE
-    Channel-->>B: Transmits COOPERATE
-    B->>Channel: Retaliates against Alpha's R5 glitch -> DEFECT
-    Channel-->>A: Transmits DEFECT
-    Note over A,B: Round 6: Alpha played C, Beta played D. Payoffs: (0, +5)
-
-    Note over A,B: Round 7: The Vendetta Echoes Back!
-    A->>Channel: Retaliates against Beta's R6 defection -> DEFECT
-    Channel-->>B: Transmits DEFECT
-    B->>Channel: Mirrors Alpha's R6 move -> COOPERATE
-    Channel-->>A: Transmits COOPERATE
-    Note over A,B: Round 7: Alpha played D, Beta played C. Payoffs: (+5, 0)
-    
-    Note over A,B: Endless Alternation: CD <-> DC forever!
+```text
+Round 1-4:  [Agent Alpha: C] <──────────────> [Agent Beta: C]    --> Mutual Trust (+3 / +3)
+                   |                                  |
+Round 5:    [Alpha: Intends C]                        |
+                   | (⚡ 2% Noise Inversion)          |
+                   v                                  |
+            [Alpha: Plays D] ──(+5 vs 0)────────────> [Beta: Plays C]
+                   |                                  |
+Round 6:           | <──────────(Beta retaliates)──── [Beta: Plays D]
+            [Alpha: Plays C] <──(0 vs +5)─────────────┘
+                   |
+Round 7:    [Alpha: Retaliates] ────────────────────> [Beta: Plays C]
+            [Alpha: Plays D] ───(+5 vs 0)───────────> |
+                   |                                  |
+            ========================================================
+            RESULT: Endless Alternating Vendetta (CD <-> DC) Forever!
+            ========================================================
 ```
+
+| Round | Alpha (TFT) | Beta (TFT) | Channel Status | Payoff | Consequence |
+| :---: | :---: | :---: | :--- | :---: | :--- |
+| **R1–4** | `COOPERATE` | `COOPERATE` | Clean transmission | `+3 / +3` | Stable mutual cooperation |
+| **R5** | **`DEFECT`** | `COOPERATE` | **⚡ Noise Flip (Alpha C ➔ D)** | `+5 / 0` | Beta feels betrayed |
+| **R6** | `COOPERATE` | **`DEFECT`** | Beta retaliates against R5 | `0 / +5` | Alpha feels betrayed |
+| **R7** | **`DEFECT`** | `COOPERATE` | Alpha retaliates against R6 | `+5 / 0` | The feud echoes back! |
+| **R8+** | `C ⇄ D` | `D ⇄ C` | Alternating Vendetta | `+2.5 avg` | Trust permanently broken |
 
 In a 50-round duel between two Tit-for-Tat agents under 2% noise:
 - Mutual cooperation occurred in **only 9 rounds**.
@@ -209,23 +205,33 @@ Discovered by Martin Nowak and Karl Sigmund in 1993:
   - **Win** (payoff was satisfying: $CC \to +3$ or $DC \to +5$): **STAY** with the same action.
   - **Lose** (payoff was unsatisfying: $CD \to 0$ or $DD \to +1$): **SHIFT** to the opposite action.
 
-```mermaid
-sequenceDiagram
-    autonumber
-    participant A as Pavlov Alpha
-    participant B as Pavlov Beta
-
-    Note over A,B: Round 1: Both Cooperate (CC) -> Win for both!
-    Note over A,B: Round 2: Alpha intends C, but Noise flips to D!
-    Note over A,B: Outcome: Alpha played D, Beta played C.
-    Note over A: Alpha got DC (+5) -> "Win!" -> STAY on D
-    Note over B: Beta got CD (0) -> "Loss!" -> SHIFT to D
-    Note over A,B: Round 3: Alpha plays D, Beta plays D.
-    Note over A: Alpha got DD (+1) -> "Loss!" -> SHIFT to C
-    Note over B: Beta got DD (+1) -> "Loss!" -> SHIFT to C
-    Note over A,B: Round 4: Alpha plays C, Beta plays C!
-    Note over A,B: ✨ HEALED! Back to mutual cooperation in exactly 2 rounds!
+```text
+Round 1:   [Pavlov Alpha: C] <───────────────────> [Pavlov Beta: C]   --> Win! Both STAY on C
+                  |                                       |
+Round 2:   [Alpha: Intends C]                             |
+                  | (⚡ Noise Inversion)                  |
+                  v                                       |
+           [Alpha: Plays D] ──────(+5 vs 0)─────────────> [Beta: Plays C]
+                  |                                       |
+                  | Alpha: got +5 (Win!) --> STAY on D    | Beta: got 0 (Loss!) --> SHIFT to D
+                  v                                       v
+Round 3:   [Alpha: Plays D] <─────(+1 vs +1)────────────> [Beta: Plays D]
+                  |                                       |
+                  | Alpha: got +1 (Loss!) --> SHIFT to C  | Beta: got +1 (Loss!) --> SHIFT to C
+                  v                                       v
+Round 4:   [Alpha: Plays C] <─────(+3 vs +3)────────────> [Pavlov Beta: C]
+                  |                                       |
+           =======================================================================
+           RESULT: ✨ HEALED! Restored to Mutual Cooperation in exactly 2 rounds!
+           =======================================================================
 ```
+
+| Round | Alpha Decision | Beta Decision | Executed Actions | Payoffs | Alpha Reflex | Beta Reflex | Outcome |
+| :---: | :--- | :--- | :---: | :---: | :--- | :--- | :--- |
+| **R1** | `COOPERATE` | `COOPERATE` | `C / C` | `+3 / +3` | Satisfied ($\ge 3$) ➔ **STAY** | Satisfied ($\ge 3$) ➔ **STAY** | Mutual Trust |
+| **R2** | `COOPERATE` *(flipped)* | `COOPERATE` | **`D / C`** | `+5 / 0` | Got $+5$ (Win!) ➔ **STAY on D** | Got $0$ (Loss!) ➔ **SHIFT to D** | ⚡ Noise Glitch |
+| **R3** | Stay on `D` | Shift to `D` | `D / D` | `+1 / +1` | Got $+1$ (Loss!) ➔ **SHIFT to C** | Got $+1$ (Loss!) ➔ **SHIFT to C** | Mutual Punishment |
+| **R4** | Shift to `C` | Shift to `C` | **`C / C`** | `+3 / +3` | Got $+3$ (Win!) ➔ **STAY on C** | Got $+3$ (Win!) ➔ **STAY on C** | **✨ Fully Healed!** |
 
 Pavlov possesses a unique property: **it self-heals after noise against cooperative partners in exactly two rounds**. Furthermore, unlike naive cooperators, if it discovers an opponent is a sucker (`AlwaysCooperate`), it shifts to exploitation and stays there.
 
