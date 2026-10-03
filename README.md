@@ -12,6 +12,7 @@ The project begins with the repeated Prisoner's Dilemma and will evolve through 
 
 - [Episode 1 — Building the Laboratory: Can Cooperation Survive?](docs/episodes/01-building-the-laboratory.md)
 - [Episode 2 — The Tournament: When Selfish Agents Form a Society](docs/episodes/02-the-tournament.md)
+- [Episode 3 — Noise & Forgiveness: Why Pure Reciprocity Collapses When Communication Breaks](docs/episodes/03-noise-and-forgiveness.md)
 
 ### Implemented Strategies:
 
@@ -20,11 +21,15 @@ The project begins with the repeated Prisoner's Dilemma and will evolve through 
 - `TitForTatStrategy` (The Reciprocal Enforcer)
 - `GrimTriggerStrategy` (The Unforgiving Grudger)
 - `RandomStrategy` (The Chaos Agent)
+- `GenerousTitForTatStrategy` (The Forgiving Cooperator)
+- `TitForTwoTatsStrategy` (The Patient Cooperator)
+- `WinStayLoseShiftStrategy` (Pavlov / Adaptive Cooperator)
 
 ## Project Status
 
 - **Episode 1**: Completed & tagged at `v0.1.0-episode-1`
-- **Episode 2**: Completed on `feat/episode-2-the-tournament` (102 passing unit tests)
+- **Episode 2**: Completed & tagged at `v0.2.0-episode-2`
+- **Episode 3**: Completed & tagged at `v0.3.0-episode-3` (119 passing unit tests)
 
 ## Development
 
