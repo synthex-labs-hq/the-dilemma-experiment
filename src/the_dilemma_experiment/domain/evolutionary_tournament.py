@@ -142,6 +142,16 @@ class EvolutionaryTournament:
         return tuple(self._history)
 
     @property
+    def extinct_strategies(self) -> tuple[str, ...]:
+        """Alphabetically sorted tuple of all extinct strategy archetype names."""
+        return tuple(sorted(self._extinct_strategies))
+
+    @property
+    def active_strategies(self) -> tuple[str, ...]:
+        """Alphabetically sorted tuple of all currently active strategy archetype names."""
+        return tuple(sorted(name for name, c in self._current_counts.items() if c > 0))
+
+    @property
     def is_converged(self) -> bool:
         """Check whether the population has reached an absorbing fixation state."""
         active = [name for name, c in self._current_counts.items() if c > 0]
