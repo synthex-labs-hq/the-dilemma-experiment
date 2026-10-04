@@ -85,6 +85,8 @@ Under [ADR-017: Replicator Dynamics Population Model](../adr/017-replicator-dyna
 
 ### Experiment A: The Altruist-Predator Boom & Bust (The Ecological Tragedy)
 
+![The Altruist-Predator Collapse](images/ep4_boom_bust.jpg)
+
 To observe natural selection in its rawest form, we initialized a population of 100 agents:
 - **50 Altruists** (`AlwaysCooperate`)
 - **50 Predators** (`AlwaysDefect`)
@@ -240,32 +242,12 @@ Our simulations empirically prove three fundamental ESS theorems:
 
 What does generational Replicator Dynamics teach us about system architecture, organizations, and distributed protocols?
 
-```text
-┌────────────────────────────────────────────────────────────────────────┐
-│               DISTRIBUTED SYSTEMS & ORGANIZATIONAL MAPPINGS            │
-├────────────────────────────────────────────────────────────────────────┤
-│ Evolutionary Dynamic       │ Systems Architecture & Leadership         │
-├────────────────────────────┼───────────────────────────────────────────┤
-│ The Altruist-Predator Trap │ Unconditional API trust invites DDoS &     │
-│                            │ resource exhaustion. Without rate limits  │
-│                            │ and token quotas, bad actors starve good  │
-│                            │ tenants.                                  │
-├────────────────────────────┼───────────────────────────────────────────┤
-│ The Invasion Barrier       │ Introducing new standards (e.g. gRPC,     │
-│                            │ Rust, type safety) fails in isolation.    │
-│                            │ You need a critical mass cluster of       │
-│                            │ services before network effects win.      │
-├────────────────────────────┼───────────────────────────────────────────┤
-│ Ecological Immune System   │ You cannot eliminate bad actors by hoping │
-│                            │ they behave. The protocol must enforce    │
-│                            │ deterministic, automated penalties        │
-│                            │ (slashing, backoff, circuit breaking).    │
-├────────────────────────────┼───────────────────────────────────────────┤
-│ Evolutionary Stability     │ Fragile systems crash on first error.     │
-│                            │ Resilient systems self-heal via automated │
-│                            │ retries, jitter, and graceful forgiveness.│
-└────────────────────────────────────────────────────────────────────────┘
-```
+| Evolutionary Dynamic | Systems Architecture & Leadership Mapping |
+| :--- | :--- |
+| **The Altruist-Predator Trap** | Unconditional API trust invites DDoS and resource exhaustion. Without rate limits and token quotas, bad actors starve good tenants. |
+| **The Invasion Barrier** | Introducing new standards (e.g. gRPC, Rust, type safety) fails in isolation. You need a critical mass cluster of services before network effects win. |
+| **Ecological Immune System** | You cannot eliminate bad actors by hoping they behave. The protocol must enforce deterministic, automated penalties (slashing, backoff, circuit breaking). |
+| **Evolutionary Stability** | Fragile systems crash on first error. Resilient systems self-heal via automated retries, jitter, and graceful forgiveness. |
 
 ---
 
