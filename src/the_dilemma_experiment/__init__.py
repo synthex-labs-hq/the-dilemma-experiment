@@ -17,6 +17,17 @@ from the_dilemma_experiment.domain.prisoners_dilemma import (
     DEFAULT_PAYOFF_MATRIX,
     PrisonersDilemma,
 )
+from the_dilemma_experiment.domain.reputation import (
+    GossipChannel,
+    MoralStanding,
+    ReputationEvent,
+    ReputationRegistry,
+)
+from the_dilemma_experiment.domain.reputation_tournament import (
+    ReputationLeaderboardEntry,
+    ReputationTournament,
+    ReputationTournamentResult,
+)
 from the_dilemma_experiment.domain.round import Round
 from the_dilemma_experiment.domain.spatial_grid import ToroidalGrid2D
 from the_dilemma_experiment.domain.spatial_tournament import (
@@ -48,8 +59,17 @@ from the_dilemma_experiment.strategies.generous_tit_for_tat import (
 from the_dilemma_experiment.strategies.grim_trigger import (
     GrimTriggerStrategy,
 )
+from the_dilemma_experiment.strategies.hypocrite import (
+    HypocriteStrategy,
+)
+from the_dilemma_experiment.strategies.image_scorer import (
+    ImageScorerStrategy,
+)
 from the_dilemma_experiment.strategies.random_strategy import (
     RandomStrategy,
+)
+from the_dilemma_experiment.strategies.stern_judger import (
+    SternJudgingStrategy,
 )
 from the_dilemma_experiment.strategies.tit_for_tat import (
     TitForTatStrategy,
@@ -74,21 +94,31 @@ __all__ = [
     "Game",
     "GenerationResult",
     "GenerousTitForTatStrategy",
+    "GossipChannel",
     "GrimTriggerStrategy",
+    "HypocriteStrategy",
+    "ImageScorerStrategy",
     "LeaderboardEntry",
     "Match",
     "MatchResult",
+    "MoralStanding",
     "NeighborhoodType",
     "NetworkGraph",
     "Payoff",
     "Population",
     "PrisonersDilemma",
     "RandomStrategy",
+    "ReputationEvent",
+    "ReputationLeaderboardEntry",
+    "ReputationRegistry",
+    "ReputationTournament",
+    "ReputationTournamentResult",
     "Round",
     "SpatialGenerationResult",
     "SpatialTopology",
     "SpatialTournament",
     "SpatialTournamentResult",
+    "SternJudgingStrategy",
     "Strategy",
     "TitForTatStrategy",
     "TitForTwoTatsStrategy",

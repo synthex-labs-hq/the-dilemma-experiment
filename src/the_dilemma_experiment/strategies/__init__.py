@@ -10,8 +10,17 @@ from the_dilemma_experiment.strategies.generous_tit_for_tat import (
 from the_dilemma_experiment.strategies.grim_trigger import (
     GrimTriggerStrategy,
 )
+from the_dilemma_experiment.strategies.hypocrite import (
+    HypocriteStrategy,
+)
+from the_dilemma_experiment.strategies.image_scorer import (
+    ImageScorerStrategy,
+)
 from the_dilemma_experiment.strategies.random_strategy import (
     RandomStrategy,
+)
+from the_dilemma_experiment.strategies.stern_judger import (
+    SternJudgingStrategy,
 )
 from the_dilemma_experiment.strategies.tit_for_tat import (
     TitForTatStrategy,
@@ -28,7 +37,10 @@ __all__ = [
     "AlwaysDefectStrategy",
     "GenerousTitForTatStrategy",
     "GrimTriggerStrategy",
+    "HypocriteStrategy",
+    "ImageScorerStrategy",
     "RandomStrategy",
+    "SternJudgingStrategy",
     "TitForTatStrategy",
     "TitForTwoTatsStrategy",
     "WinStayLoseShiftStrategy",
