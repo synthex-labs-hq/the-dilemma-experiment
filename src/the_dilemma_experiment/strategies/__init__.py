@@ -4,6 +4,13 @@ from the_dilemma_experiment.strategies.always_cooperate import (
 from the_dilemma_experiment.strategies.always_defect import (
     AlwaysDefectStrategy,
 )
+from the_dilemma_experiment.strategies.commons_strategies import (
+    AntisocialPunisherStrategy,
+    OstromSanctionerStrategy,
+    OverHarvesterStrategy,
+    SecondOrderFreeRiderStrategy,
+    SustainableHarvesterStrategy,
+)
 from the_dilemma_experiment.strategies.generous_tit_for_tat import (
     GenerousTitForTatStrategy,
 )
@@ -41,15 +48,20 @@ from the_dilemma_experiment.strategies.win_stay_lose_shift import (
 __all__ = [
     "AlwaysCooperateStrategy",
     "AlwaysDefectStrategy",
+    "AntisocialPunisherStrategy",
     "FalseBeardStrategy",
     "GenerousTitForTatStrategy",
     "GrimTriggerStrategy",
     "HypocriteStrategy",
     "ImageScorerStrategy",
+    "OstromSanctionerStrategy",
+    "OverHarvesterStrategy",
     "RandomStrategy",
     "RioloToleranceStrategy",
+    "SecondOrderFreeRiderStrategy",
     "SternJudgingStrategy",
     "StrictTribalStrategy",
+    "SustainableHarvesterStrategy",
     "TagReciprocalStrategy",
     "TitForTatStrategy",
     "TitForTwoTatsStrategy",
