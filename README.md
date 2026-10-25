@@ -13,6 +13,7 @@ The project begins with the repeated Prisoner's Dilemma and will evolve through 
 - [Episode 1 — Building the Laboratory: Can Cooperation Survive?](docs/episodes/01-building-the-laboratory.md)
 - [Episode 2 — The Tournament: When Selfish Agents Form a Society](docs/episodes/02-the-tournament.md)
 - [Episode 3 — Noise & Forgiveness: Why Pure Reciprocity Collapses When Communication Breaks](docs/episodes/03-noise-and-forgiveness.md)
+- [Episode 4 — Natural Selection & Evolution: Replicator Dynamics and the Survival of Cooperation](docs/episodes/04-natural-selection-and-evolution.md)
 
 ### Implemented Strategies:
 
@@ -30,6 +31,7 @@ The project begins with the repeated Prisoner's Dilemma and will evolve through 
 - **Episode 1**: Completed & tagged at `v0.1.0-episode-1`
 - **Episode 2**: Completed & tagged at `v0.2.0-episode-2`
 - **Episode 3**: Completed & tagged at `v0.3.0-episode-3` (119 passing unit tests)
+- **Episode 4**: Completed & tagged at `v0.4.0-episode-4` (126 passing unit tests)
 
 ## Development
 

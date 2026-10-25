@@ -3,7 +3,11 @@
 from the_dilemma_experiment.domain.action import Action
 from the_dilemma_experiment.domain.agent import Agent
 from the_dilemma_experiment.domain.context import DecisionContext
+from the_dilemma_experiment.domain.evolutionary_tournament import (
+    EvolutionaryTournament,
+)
 from the_dilemma_experiment.domain.game import Game
+from the_dilemma_experiment.domain.generation_result import GenerationResult
 from the_dilemma_experiment.domain.match import Match
 from the_dilemma_experiment.domain.match_result import MatchResult
 from the_dilemma_experiment.domain.payoff import Payoff
@@ -51,7 +55,9 @@ __all__ = [
     "AlwaysCooperateStrategy",
     "AlwaysDefectStrategy",
     "DecisionContext",
+    "EvolutionaryTournament",
     "Game",
+    "GenerationResult",
     "GenerousTitForTatStrategy",
     "GrimTriggerStrategy",
     "LeaderboardEntry",
