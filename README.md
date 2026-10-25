@@ -45,6 +45,7 @@ The project begins with the repeated Prisoner's Dilemma and will evolve through 
 - **Episode 5**: Completed & tagged at `v0.5.0-episode-5` (139 passing unit tests)
 - **Episode 6**: Completed & tagged at `v0.6.0-episode-6` (152 passing unit tests)
 - **Episode 7**: Completed & tagged at `v0.7.0-episode-7` (167 passing unit tests)
+- **Episode 8**: Completed & tagged at `v0.8.0-episode-8` (181 passing unit tests)
 
 ## Development
 

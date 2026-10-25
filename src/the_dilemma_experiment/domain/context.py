@@ -11,3 +11,6 @@ class DecisionContext:
     is_public: bool = True
     opponent_tag: float | str | None = None
     self_tag: float | str | None = None
+    resource_stock: float | None = None
+    endowment: float | None = None
+    group_size: int | None = None
