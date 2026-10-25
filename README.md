@@ -33,7 +33,7 @@ The project begins with the repeated Prisoner's Dilemma and will evolve through 
 - **Episode 2**: Completed & tagged at `v0.2.0-episode-2`
 - **Episode 3**: Completed & tagged at `v0.3.0-episode-3` (119 passing unit tests)
 - **Episode 4**: Completed & tagged at `v0.4.0-episode-4` (126 passing unit tests)
-- **Episode 5**: Completed on `feat/episode-5-spatial-networks` (139 passing unit tests)
+- **Episode 5**: Completed & tagged at `v0.5.0-episode-5` (139 passing unit tests)
 
 ## Development
 
