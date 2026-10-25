@@ -35,6 +35,21 @@ from the_dilemma_experiment.domain.spatial_tournament import (
     SpatialTournamentResult,
 )
 from the_dilemma_experiment.domain.strategy import Strategy
+from the_dilemma_experiment.domain.tag import (
+    TagKind,
+    TagProfile,
+    calculate_shannon_diversity,
+    categorical_tag_distance,
+    compute_tag_distance,
+    continuous_tag_distance,
+)
+from the_dilemma_experiment.domain.tag_tournament import (
+    TagEvolutionaryTournament,
+    TagGenerationMetrics,
+    TagLeaderboardEntry,
+    TagTournament,
+    TagTournamentResult,
+)
 from the_dilemma_experiment.domain.topology import (
     Coordinate2D,
     NeighborhoodType,
@@ -77,7 +92,18 @@ __all__ = [
     "SpatialTournament",
     "SpatialTournamentResult",
     "Strategy",
+    "TagEvolutionaryTournament",
+    "TagGenerationMetrics",
+    "TagKind",
+    "TagLeaderboardEntry",
+    "TagProfile",
+    "TagTournament",
+    "TagTournamentResult",
     "ToroidalGrid2D",
     "Tournament",
     "TournamentResult",
+    "calculate_shannon_diversity",
+    "categorical_tag_distance",
+    "compute_tag_distance",
+    "continuous_tag_distance",
 ]

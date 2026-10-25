@@ -37,6 +37,21 @@ from the_dilemma_experiment.domain.spatial_tournament import (
     SpatialTournamentResult,
 )
 from the_dilemma_experiment.domain.strategy import Strategy
+from the_dilemma_experiment.domain.tag import (
+    TagKind,
+    TagProfile,
+    calculate_shannon_diversity,
+    categorical_tag_distance,
+    compute_tag_distance,
+    continuous_tag_distance,
+)
+from the_dilemma_experiment.domain.tag_tournament import (
+    TagEvolutionaryTournament,
+    TagGenerationMetrics,
+    TagLeaderboardEntry,
+    TagTournament,
+    TagTournamentResult,
+)
 from the_dilemma_experiment.domain.topology import (
     Coordinate2D,
     NeighborhoodType,
@@ -71,6 +86,12 @@ from the_dilemma_experiment.strategies.random_strategy import (
 from the_dilemma_experiment.strategies.stern_judger import (
     SternJudgingStrategy,
 )
+from the_dilemma_experiment.strategies.tag_based import (
+    FalseBeardStrategy,
+    RioloToleranceStrategy,
+    StrictTribalStrategy,
+    TagReciprocalStrategy,
+)
 from the_dilemma_experiment.strategies.tit_for_tat import (
     TitForTatStrategy,
 )
@@ -90,6 +111,7 @@ __all__ = [
     "Coordinate2D",
     "DecisionContext",
     "EvolutionaryTournament",
+    "FalseBeardStrategy",
     "FitnessMode",
     "Game",
     "GenerationResult",
@@ -113,6 +135,7 @@ __all__ = [
     "ReputationRegistry",
     "ReputationTournament",
     "ReputationTournamentResult",
+    "RioloToleranceStrategy",
     "Round",
     "SpatialGenerationResult",
     "SpatialTopology",
@@ -120,10 +143,23 @@ __all__ = [
     "SpatialTournamentResult",
     "SternJudgingStrategy",
     "Strategy",
+    "StrictTribalStrategy",
+    "TagEvolutionaryTournament",
+    "TagGenerationMetrics",
+    "TagKind",
+    "TagLeaderboardEntry",
+    "TagProfile",
+    "TagReciprocalStrategy",
+    "TagTournament",
+    "TagTournamentResult",
     "TitForTatStrategy",
     "TitForTwoTatsStrategy",
     "ToroidalGrid2D",
     "Tournament",
     "TournamentResult",
     "WinStayLoseShiftStrategy",
+    "calculate_shannon_diversity",
+    "categorical_tag_distance",
+    "compute_tag_distance",
+    "continuous_tag_distance",
 ]

@@ -22,6 +22,12 @@ from the_dilemma_experiment.strategies.random_strategy import (
 from the_dilemma_experiment.strategies.stern_judger import (
     SternJudgingStrategy,
 )
+from the_dilemma_experiment.strategies.tag_based import (
+    FalseBeardStrategy,
+    RioloToleranceStrategy,
+    StrictTribalStrategy,
+    TagReciprocalStrategy,
+)
 from the_dilemma_experiment.strategies.tit_for_tat import (
     TitForTatStrategy,
 )
@@ -35,12 +41,16 @@ from the_dilemma_experiment.strategies.win_stay_lose_shift import (
 __all__ = [
     "AlwaysCooperateStrategy",
     "AlwaysDefectStrategy",
+    "FalseBeardStrategy",
     "GenerousTitForTatStrategy",
     "GrimTriggerStrategy",
     "HypocriteStrategy",
     "ImageScorerStrategy",
     "RandomStrategy",
+    "RioloToleranceStrategy",
     "SternJudgingStrategy",
+    "StrictTribalStrategy",
+    "TagReciprocalStrategy",
     "TitForTatStrategy",
     "TitForTwoTatsStrategy",
     "WinStayLoseShiftStrategy",

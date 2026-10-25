@@ -9,3 +9,5 @@ class DecisionContext:
     opponent_score: int | None = None
     opponent_standing: str | None = None
     is_public: bool = True
+    opponent_tag: float | str | None = None
+    self_tag: float | str | None = None
