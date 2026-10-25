@@ -15,6 +15,17 @@ from the_dilemma_experiment.domain.prisoners_dilemma import (
     DEFAULT_PAYOFF_MATRIX,
     PrisonersDilemma,
 )
+from the_dilemma_experiment.domain.reputation import (
+    GossipChannel,
+    MoralStanding,
+    ReputationEvent,
+    ReputationRegistry,
+)
+from the_dilemma_experiment.domain.reputation_tournament import (
+    ReputationLeaderboardEntry,
+    ReputationTournament,
+    ReputationTournamentResult,
+)
 from the_dilemma_experiment.domain.round import Round
 from the_dilemma_experiment.domain.spatial_grid import ToroidalGrid2D
 from the_dilemma_experiment.domain.spatial_tournament import (
@@ -45,14 +56,21 @@ __all__ = [
     "FitnessMode",
     "Game",
     "GenerationResult",
+    "GossipChannel",
     "LeaderboardEntry",
     "Match",
     "MatchResult",
+    "MoralStanding",
     "NeighborhoodType",
     "NetworkGraph",
     "Payoff",
     "Population",
     "PrisonersDilemma",
+    "ReputationEvent",
+    "ReputationLeaderboardEntry",
+    "ReputationRegistry",
+    "ReputationTournament",
+    "ReputationTournamentResult",
     "Round",
     "SpatialGenerationResult",
     "SpatialTopology",
