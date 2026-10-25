@@ -27,6 +27,8 @@ To find out, in **Episode 5**, we moved our agents out of the primordial soup an
 
 ### The geometry of the fortress: Spatial Lattices (ADR-019)
 
+![The 3x3 Cluster Shield](images/ep5_cluster_shield.jpg)
+
 In spatial evolutionary game theory (Martin Nowak & Robert May 1992 *Nature*, Francisco Santos & Jorge Pacheco 2005 *PRL*), agents occupy discrete nodes on a spatial structure $\mathcal{G} = (\mathcal{V}, \mathcal{E})$.
 
 Instead of an all-to-all tournament ($K_N$), an agent at node $u$ interacts strictly with its topological neighbors $\mathcal{N}(u)$:
