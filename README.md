@@ -16,6 +16,7 @@ The project begins with the repeated Prisoner's Dilemma and will evolve through 
 - [Episode 4 — Natural Selection & Evolution: Replicator Dynamics and the Survival of Cooperation](docs/episodes/04-natural-selection-and-evolution.md)
 - [Episode 5 — Spatial Networks & Topologies: The Fortress of Geography](docs/episodes/05-spatial-networks-and-topologies.md)
 - [Episode 6 — Indirect Reciprocity, Reputation & Gossip: Public Ledgers and Moral Systems](docs/episodes/06-indirect-reciprocity-and-reputation.md)
+- [Episode 7 — Tags, Tribalism & In-Group Favoritism: The Green Beard Effect](docs/episodes/07-tags-tribalism-and-in-group-favoritism.md)
 
 ### Implemented Strategies:
 
@@ -30,6 +31,10 @@ The project begins with the repeated Prisoner's Dilemma and will evolve through 
 - `ImageScorerStrategy` (First-Order Reputation Scorer)
 - `SternJudgingStrategy` (Second-Order Moral Enforcer)
 - `HypocriteStrategy` (Public Virtuous / Shadow Defector)
+- `RioloToleranceStrategy` (Continuous Tag & Tolerance Discriminator)
+- `StrictTribalStrategy` (Categorical In-Group Cooperator / Out-Group Defector)
+- `FalseBeardStrategy` (The Parasitic Chameleon Defector)
+- `TagReciprocalStrategy` (In-Group Tit-For-Tat / Out-Group Hostility)
 
 ## Project Status
 
@@ -39,6 +44,7 @@ The project begins with the repeated Prisoner's Dilemma and will evolve through 
 - **Episode 4**: Completed & tagged at `v0.4.0-episode-4` (126 passing unit tests)
 - **Episode 5**: Completed & tagged at `v0.5.0-episode-5` (139 passing unit tests)
 - **Episode 6**: Completed & tagged at `v0.6.0-episode-6` (152 passing unit tests)
+- **Episode 7**: Completed & tagged at `v0.7.0-episode-7` (167 passing unit tests)
 
 ## Development
 
