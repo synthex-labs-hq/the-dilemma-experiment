@@ -10,6 +10,7 @@ from the_dilemma_experiment.domain.game import Game
 from the_dilemma_experiment.domain.generation_result import GenerationResult
 from the_dilemma_experiment.domain.match import Match
 from the_dilemma_experiment.domain.match_result import MatchResult
+from the_dilemma_experiment.domain.network_graph import NetworkGraph
 from the_dilemma_experiment.domain.payoff import Payoff
 from the_dilemma_experiment.domain.population import Population
 from the_dilemma_experiment.domain.prisoners_dilemma import (
@@ -17,7 +18,19 @@ from the_dilemma_experiment.domain.prisoners_dilemma import (
     PrisonersDilemma,
 )
 from the_dilemma_experiment.domain.round import Round
+from the_dilemma_experiment.domain.spatial_grid import ToroidalGrid2D
+from the_dilemma_experiment.domain.spatial_tournament import (
+    FitnessMode,
+    SpatialGenerationResult,
+    SpatialTournament,
+    SpatialTournamentResult,
+)
 from the_dilemma_experiment.domain.strategy import Strategy
+from the_dilemma_experiment.domain.topology import (
+    Coordinate2D,
+    NeighborhoodType,
+    SpatialTopology,
+)
 from the_dilemma_experiment.domain.tournament import Tournament
 from the_dilemma_experiment.domain.tournament_result import (
     LeaderboardEntry,
@@ -54,8 +67,10 @@ __all__ = [
     "Agent",
     "AlwaysCooperateStrategy",
     "AlwaysDefectStrategy",
+    "Coordinate2D",
     "DecisionContext",
     "EvolutionaryTournament",
+    "FitnessMode",
     "Game",
     "GenerationResult",
     "GenerousTitForTatStrategy",
@@ -63,14 +78,21 @@ __all__ = [
     "LeaderboardEntry",
     "Match",
     "MatchResult",
+    "NeighborhoodType",
+    "NetworkGraph",
     "Payoff",
     "Population",
     "PrisonersDilemma",
     "RandomStrategy",
     "Round",
+    "SpatialGenerationResult",
+    "SpatialTopology",
+    "SpatialTournament",
+    "SpatialTournamentResult",
     "Strategy",
     "TitForTatStrategy",
     "TitForTwoTatsStrategy",
+    "ToroidalGrid2D",
     "Tournament",
     "TournamentResult",
     "WinStayLoseShiftStrategy",
