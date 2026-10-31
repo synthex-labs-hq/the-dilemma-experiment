@@ -188,3 +188,35 @@ def test_simulate_commons_endpoint() -> None:
     # Sanctions were applied against the overharvesters
     assert data["total_sanctions"] >= 0
     assert data["total_fines_imposed"] >= 0.0
+
+
+def test_simulate_gauntlet_endpoint() -> None:
+    """Verifies that the custom strategy Gauntlet runs 5 benchmark duels and scores Axelrodian axioms."""
+    payload = {
+        "name": "NobleReciprocator",
+        "opening_move": "COOPERATE",
+        "retaliation": "one_to_one",
+        "forgiveness": 0.15,
+        "rounds_per_opponent": 10,
+    }
+    response = client.post("/api/simulate/gauntlet", json=payload)
+    assert response.status_code == 200
+    data = response.json()
+
+    assert data["custom_name"] == "NobleReciprocator"
+    assert "scorecard" in data
+    scorecard = data["scorecard"]
+    assert scorecard["niceness"] == 1.0
+    assert scorecard["retaliation"] == 1.0
+    assert scorecard["forgiveness"] > 0.0
+    assert scorecard["total_score"] > 0
+    assert "Noble Reciprocator" in scorecard["archetype_badge"]
+
+    assert len(data["duels"]) == 5
+    opp_ids = [d["opponent_id"] for d in data["duels"]]
+    assert "tit_for_tat" in opp_ids
+    assert "always_defect" in opp_ids
+    assert "win_stay_lose_shift" in opp_ids
+    assert "extortioner" in opp_ids
+    assert "generous_zd" in opp_ids
+
