@@ -130,3 +130,12 @@ def test_simulate_tournament_endpoint() -> None:
     assert len(data["leaderboard"]) == 6
     assert data["leaderboard"][0]["rank"] == 1
     assert data["leaderboard"][0]["total_score"] > 0
+    assert "pairwise_matches" in data
+    assert len(data["pairwise_matches"]) == 15
+    first_match = data["pairwise_matches"][0]
+    assert "first_agent_id" in first_match
+    assert "second_agent_id" in first_match
+    assert "first_score" in first_match
+    assert "second_score" in first_match
+    assert first_match["rounds_played"] == 10
+

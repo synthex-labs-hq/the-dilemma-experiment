@@ -62,11 +62,23 @@ export interface LeaderboardRow {
   cooperation_rate: number
 }
 
+export interface PairwiseMatchSummary {
+  first_agent_id: string
+  second_agent_id: string
+  first_score: number
+  second_score: number
+  winner_id: string | null
+  rounds_played: number
+  first_cooperation_rate: number
+  second_cooperation_rate: number
+}
+
 export interface TournamentResponse {
   total_agents: number
   total_matches: number
   population_cooperation_rate: number
   leaderboard: LeaderboardRow[]
+  pairwise_matches?: PairwiseMatchSummary[]
 }
 
 export interface TournamentSelection {
