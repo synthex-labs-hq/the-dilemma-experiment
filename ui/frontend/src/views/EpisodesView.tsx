@@ -1,4 +1,6 @@
-import React from 'react'
+import React, { useState } from 'react'
+import { SpatialGridLab } from '../components/SpatialGridLab'
+import { CommonsResourceLab } from '../components/CommonsResourceLab'
 
 interface EpisodeSummary {
   number: number
@@ -7,9 +9,12 @@ interface EpisodeSummary {
   paradox: string
   keyStrategies: string[]
   status: 'Ready' | 'Lab Module'
+  labType?: 'spatial' | 'commons'
 }
 
 export const EpisodesView: React.FC = () => {
+  const [activeLab, setActiveLab] = useState<'spatial' | 'commons' | null>(null)
+
   const episodes: EpisodeSummary[] = [
     {
       number: 1,
@@ -50,6 +55,7 @@ export const EpisodesView: React.FC = () => {
       paradox: 'Physical proximity allows cooperators to shield each other on 2D toroidal grids.',
       keyStrategies: ['Toroidal Grid 2D', 'Moore Neighborhoods'],
       status: 'Lab Module',
+      labType: 'spatial',
     },
     {
       number: 6,
@@ -74,6 +80,7 @@ export const EpisodesView: React.FC = () => {
       paradox: 'Altruistic peer punishment solves the second-order free-rider dilemma.',
       keyStrategies: ['Sustainable Harvester', 'Ostrom Sanctioner', 'Antisocial Punisher'],
       status: 'Lab Module',
+      labType: 'commons',
     },
     {
       number: 9,
@@ -81,7 +88,7 @@ export const EpisodesView: React.FC = () => {
       subtitle: 'Press-Dyson Asymmetric Power',
       paradox: 'An extortioner unilaterally dictates the co-player\'s surplus ratio, but fails at scale.',
       keyStrategies: ['Extortioner (χ=3.0)', 'Equalizer (c=2.0)', 'Generous ZD'],
-      status: 'Lab Module',
+      status: 'Ready',
     },
     {
       number: 10,
@@ -89,7 +96,7 @@ export const EpisodesView: React.FC = () => {
       subtitle: 'LLM Multi-Agent Societies & Cheap Talk',
       paradox: 'In accountable societies, strategic deception is an evolutionary dead end.',
       keyStrategies: ['Honest Diplomat', 'Machiavellian', 'Pragmatic Contractor', 'Skeptical Realist'],
-      status: 'Lab Module',
+      status: 'Ready',
     },
   ]
 
@@ -99,7 +106,7 @@ export const EpisodesView: React.FC = () => {
         <div>
           <h2 className="gradient-text-cyan">THE 10-EPISODE LABORATORY CURRICULUM</h2>
           <p className="text-secondary">
-            Explore the complete scientific progression of The Dilemma Experiment across all ten milestones.
+            Explore the complete scientific progression of The Dilemma Experiment across all ten milestones. Launch interactive laboratories for spatial lattice topologies and Ostrom common-pool resources.
           </p>
         </div>
       </div>
@@ -126,9 +133,24 @@ export const EpisodesView: React.FC = () => {
                 </span>
               ))}
             </div>
+
+            {ep.labType && (
+              <div className="lab-launcher-row mt-3">
+                <button
+                  className="btn btn-primary btn-xs w-full"
+                  onClick={() => setActiveLab(ep.labType || null)}
+                >
+                  {ep.labType === 'spatial' ? '🔬 LAUNCH SPATIAL 2D LAB' : '🌾 LAUNCH COMMONS & OSTROM LAB'}
+                </button>
+              </div>
+            )}
           </div>
         ))}
       </div>
+
+      {/* Interactive Lab Drawers/Modals */}
+      {activeLab === 'spatial' && <SpatialGridLab onClose={() => setActiveLab(null)} />}
+      {activeLab === 'commons' && <CommonsResourceLab onClose={() => setActiveLab(null)} />}
     </div>
   )
 }

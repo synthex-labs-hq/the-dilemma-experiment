@@ -18,10 +18,18 @@ from the_dilemma_experiment.domain.cognitive import (
     DeceptionTracker,
     NegotiationChannel,
 )
+from the_dilemma_experiment.domain.commons import (
+    CommonPoolResource,
+    PublicGoodsPool,
+)
+from the_dilemma_experiment.domain.commons_tournament import CommonsTournament
 from the_dilemma_experiment.domain.match import Match
 from the_dilemma_experiment.domain.population import Population
 from the_dilemma_experiment.domain.prisoners_dilemma import PrisonersDilemma
+from the_dilemma_experiment.domain.spatial_grid import ToroidalGrid2D
+from the_dilemma_experiment.domain.spatial_tournament import SpatialTournament
 from the_dilemma_experiment.domain.strategy import Strategy
+from the_dilemma_experiment.domain.topology import NeighborhoodType
 from the_dilemma_experiment.domain.tournament import Tournament
 from the_dilemma_experiment.strategies.always_cooperate import (
     AlwaysCooperateStrategy,
@@ -81,6 +89,7 @@ app.add_middleware(
 
 
 # --- Strategy Metadata & Catalog ---
+
 
 class StrategyMeta(BaseModel):
     id: str
@@ -155,7 +164,6 @@ STRATEGY_CATALOG: dict[str, tuple[StrategyMeta, Callable[[], Strategy]]] = {
         ),
         lambda: RandomStrategy(),
     ),
-
     # Episode 3: Noise & Forgiveness
     "generous_tit_for_tat": (
         StrategyMeta(
@@ -193,7 +201,6 @@ STRATEGY_CATALOG: dict[str, tuple[StrategyMeta, Callable[[], Strategy]]] = {
         ),
         lambda: WinStayLoseShiftStrategy(),
     ),
-
     # Episode 6: Reputation & Gossip
     "image_scorer": (
         StrategyMeta(
@@ -231,7 +238,6 @@ STRATEGY_CATALOG: dict[str, tuple[StrategyMeta, Callable[[], Strategy]]] = {
         ),
         lambda: HypocriteStrategy(),
     ),
-
     # Episode 7: Tags & Tribalism
     "strict_tribal": (
         StrategyMeta(
@@ -281,7 +287,6 @@ STRATEGY_CATALOG: dict[str, tuple[StrategyMeta, Callable[[], Strategy]]] = {
         ),
         lambda: TagReciprocalStrategy(),
     ),
-
     # Episode 8: Commons & Sanctions
     "sustainable_harvester": (
         StrategyMeta(
@@ -343,7 +348,6 @@ STRATEGY_CATALOG: dict[str, tuple[StrategyMeta, Callable[[], Strategy]]] = {
         ),
         lambda: AntisocialPunisherStrategy(),
     ),
-
     # Episode 9: Zero-Determinant Strategies
     "extortioner": (
         StrategyMeta(
@@ -381,7 +385,6 @@ STRATEGY_CATALOG: dict[str, tuple[StrategyMeta, Callable[[], Strategy]]] = {
         ),
         lambda: GenerousZDStrategy(),
     ),
-
     # Episode 10: Cognitive LLM Personas
     "honest_diplomat": (
         StrategyMeta(
@@ -394,7 +397,9 @@ STRATEGY_CATALOG: dict[str, tuple[StrategyMeta, Callable[[], Strategy]]] = {
             traits=["Natural Language", "High Honesty", "Transparent Intent"],
             is_cognitive=True,
         ),
-        lambda: CognitiveStrategy(persona=CognitivePersona.HONEST_DIPLOMAT, agent_id="HonestDiplomat"),
+        lambda: CognitiveStrategy(
+            persona=CognitivePersona.HONEST_DIPLOMAT, agent_id="HonestDiplomat"
+        ),
     ),
     "machiavellian": (
         StrategyMeta(
@@ -407,7 +412,9 @@ STRATEGY_CATALOG: dict[str, tuple[StrategyMeta, Callable[[], Strategy]]] = {
             traits=["Natural Language", "Cheap Talk", "Strategic Deception"],
             is_cognitive=True,
         ),
-        lambda: CognitiveStrategy(persona=CognitivePersona.MACHIAVELLIAN, agent_id="Machiavellian"),
+        lambda: CognitiveStrategy(
+            persona=CognitivePersona.MACHIAVELLIAN, agent_id="Machiavellian"
+        ),
     ),
     "pragmatic_contractor": (
         StrategyMeta(
@@ -420,7 +427,10 @@ STRATEGY_CATALOG: dict[str, tuple[StrategyMeta, Callable[[], Strategy]]] = {
             traits=["Natural Language", "Binding Contracts", "Disciplined Reciprocity"],
             is_cognitive=True,
         ),
-        lambda: CognitiveStrategy(persona=CognitivePersona.PRAGMATIC_CONTRACTOR, agent_id="PragmaticContractor"),
+        lambda: CognitiveStrategy(
+            persona=CognitivePersona.PRAGMATIC_CONTRACTOR,
+            agent_id="PragmaticContractor",
+        ),
     ),
     "skeptical_realist": (
         StrategyMeta(
@@ -433,18 +443,25 @@ STRATEGY_CATALOG: dict[str, tuple[StrategyMeta, Callable[[], Strategy]]] = {
             traits=["Cheap-Talk Immune", "Hard Defense", "Grim Retaliation"],
             is_cognitive=True,
         ),
-        lambda: CognitiveStrategy(persona=CognitivePersona.SKEPTICAL_REALIST, agent_id="SkepticalRealist"),
+        lambda: CognitiveStrategy(
+            persona=CognitivePersona.SKEPTICAL_REALIST, agent_id="SkepticalRealist"
+        ),
     ),
 }
 
 
 # --- Request & Response Schemas ---
 
+
 class MatchRequest(BaseModel):
     strategy_a: str = Field(..., description="Strategy ID for Agent A")
     strategy_b: str = Field(..., description="Strategy ID for Agent B")
-    round_count: int = Field(20, ge=1, le=1000, description="Number of interaction rounds")
-    noise: float = Field(0.0, ge=0.0, le=1.0, description="Observation noise probability")
+    round_count: int = Field(
+        20, ge=1, le=1000, description="Number of interaction rounds"
+    )
+    noise: float = Field(
+        0.0, ge=0.0, le=1.0, description="Observation noise probability"
+    )
     seed: int | None = Field(None, description="Random seed for reproducibility")
 
 
@@ -520,7 +537,87 @@ class TournamentResponse(BaseModel):
     pairwise_matches: list[PairwiseMatchSummary] = []
 
 
+# --- Spatial Simulation Models ---
+
+
+class SpatialSimRequest(BaseModel):
+    width: int = Field(10, ge=4, le=20)
+    height: int = Field(10, ge=4, le=20)
+    preset: str = Field("oasis")  # "oasis", "random", "conquest", "split"
+    generations: int = Field(6, ge=1, le=20)
+    coop_strategy: str = Field("always_cooperate")
+    defect_strategy: str = Field("always_defect")
+
+
+class SpatialGenerationTelemetry(BaseModel):
+    generation: int
+    distribution: dict[str, int]
+    proportions: dict[str, float]
+    grid_cells: list[str]
+    clustering_ratio: float
+    is_fixated: bool
+    dominant_strategy: str
+
+
+class SpatialSimResponse(BaseModel):
+    width: int
+    height: int
+    total_nodes: int
+    preset: str
+    generations: list[SpatialGenerationTelemetry]
+
+
+# --- Commons Simulation Models ---
+
+
+class CommonsSimRequest(BaseModel):
+    sustainable_count: int = Field(3, ge=0, le=20)
+    overharvester_count: int = Field(2, ge=0, le=20)
+    sanctioner_count: int = Field(3, ge=0, le=20)
+    freerider_bystander_count: int = Field(0, ge=0, le=20)
+    rounds: int = Field(10, ge=1, le=30)
+    initial_stock: float = Field(80.0, ge=10.0, le=500.0)
+    capacity: float = Field(100.0, ge=10.0, le=500.0)
+    regeneration_rate: float = Field(0.15, ge=0.0, le=1.0)
+    sanctions_enabled: bool = Field(True)
+    graduated_sanctions: bool = Field(False)
+
+
+class CommonsRoundTelemetry(BaseModel):
+    round: int
+    stock: float
+    mean_contribution: float
+    cooperation_rate: float
+    sanctions_applied: int
+
+
+class CommonsAgentLeaderboard(BaseModel):
+    rank: int
+    agent_id: str
+    strategy_name: str
+    total_score: float
+    average_score: float
+    total_contribution: float
+    sanctions_inflicted: int
+    fines_received: float
+    costs_paid: float
+
+
+class CommonsSimResponse(BaseModel):
+    total_rounds: int
+    initial_stock: float
+    final_stock: float
+    is_depleted: bool
+    overall_contribution_rate: float
+    total_sanctions: int
+    total_fines_imposed: float
+    total_sanction_costs: float
+    history: list[CommonsRoundTelemetry]
+    leaderboard: list[CommonsAgentLeaderboard]
+
+
 # --- API Routes ---
+
 
 @app.get("/api/health")
 def health_check() -> dict[str, str]:
@@ -542,9 +639,13 @@ def list_strategies() -> dict[str, Any]:
 def simulate_match(req: MatchRequest) -> MatchResponse:
     """Simulate a pairwise match between two strategies."""
     if req.strategy_a not in STRATEGY_CATALOG:
-        raise HTTPException(status_code=404, detail=f"Strategy '{req.strategy_a}' not found.")
+        raise HTTPException(
+            status_code=404, detail=f"Strategy '{req.strategy_a}' not found."
+        )
     if req.strategy_b not in STRATEGY_CATALOG:
-        raise HTTPException(status_code=404, detail=f"Strategy '{req.strategy_b}' not found.")
+        raise HTTPException(
+            status_code=404, detail=f"Strategy '{req.strategy_b}' not found."
+        )
 
     meta_a, factory_a = STRATEGY_CATALOG[req.strategy_a]
     meta_b, factory_b = STRATEGY_CATALOG[req.strategy_b]
@@ -581,12 +682,30 @@ def simulate_match(req: MatchRequest) -> MatchResponse:
 
             # Extract dialogue for this round
             r_turns = channel.get_conversation(agent_a.id, agent_b.id, round_number=idx)
-            msg_a = next((t.message for t in r_turns if t.sender_id == agent_a.id), None)
-            msg_b = next((t.message for t in r_turns if t.sender_id == agent_b.id), None)
+            msg_a = next(
+                (t.message for t in r_turns if t.sender_id == agent_a.id), None
+            )
+            msg_b = next(
+                (t.message for t in r_turns if t.sender_id == agent_b.id), None
+            )
 
             # Check deception
-            audit_a = next((a for a in tracker.audits if a.round_number == idx and a.agent_id == agent_a.id), None)
-            audit_b = next((a for a in tracker.audits if a.round_number == idx and a.agent_id == agent_b.id), None)
+            audit_a = next(
+                (
+                    a
+                    for a in tracker.audits
+                    if a.round_number == idx and a.agent_id == agent_a.id
+                ),
+                None,
+            )
+            audit_b = next(
+                (
+                    a
+                    for a in tracker.audits
+                    if a.round_number == idx and a.agent_id == agent_b.id
+                ),
+                None,
+            )
 
             telemetry.append(
                 RoundTelemetry(
@@ -599,8 +718,12 @@ def simulate_match(req: MatchRequest) -> MatchResponse:
                     cumulative_b=cum_b,
                     message_a=msg_a,
                     message_b=msg_b,
-                    rationale_a=strat_a.get_last_rationale(agent_b.id) if hasattr(strat_a, "get_last_rationale") else None,
-                    rationale_b=strat_b.get_last_rationale(agent_a.id) if hasattr(strat_b, "get_last_rationale") else None,
+                    rationale_a=strat_a.get_last_rationale(agent_b.id)
+                    if hasattr(strat_a, "get_last_rationale")
+                    else None,
+                    rationale_b=strat_b.get_last_rationale(agent_a.id)
+                    if hasattr(strat_b, "get_last_rationale")
+                    else None,
                     is_deceptive_a=audit_a.is_deceptive if audit_a else False,
                     is_deceptive_b=audit_b.is_deceptive if audit_b else False,
                 )
@@ -664,7 +787,9 @@ def simulate_tournament(req: TournamentRequest) -> TournamentResponse:
 
     for sel in req.selections:
         if sel.strategy_id not in STRATEGY_CATALOG:
-            raise HTTPException(status_code=404, detail=f"Strategy '{sel.strategy_id}' not found.")
+            raise HTTPException(
+                status_code=404, detail=f"Strategy '{sel.strategy_id}' not found."
+            )
         meta, factory = STRATEGY_CATALOG[sel.strategy_id]
         for i in range(1, sel.count + 1):
             agent_id = f"{meta.id}_{i:02d}"
@@ -672,7 +797,9 @@ def simulate_tournament(req: TournamentRequest) -> TournamentResponse:
             agent_strat_map[agent_id] = meta.id
 
     if len(agents) < 2:
-        raise HTTPException(status_code=400, detail="Tournament requires at least 2 agents in total.")
+        raise HTTPException(
+            status_code=400, detail="Tournament requires at least 2 agents in total."
+        )
 
     population = Population(agents)
     tournament = Tournament(
@@ -704,19 +831,25 @@ def simulate_tournament(req: TournamentRequest) -> TournamentResponse:
     for m in tournament.matches:
         if m.result:
             coop_first = (
-                sum(1 for r in m.rounds if r.first_action.name == "COOPERATE") / len(m.rounds)
+                sum(1 for r in m.rounds if r.first_action.name == "COOPERATE")
+                / len(m.rounds)
                 if m.rounds
                 else 0.0
             )
             coop_second = (
-                sum(1 for r in m.rounds if r.second_action.name == "COOPERATE") / len(m.rounds)
+                sum(1 for r in m.rounds if r.second_action.name == "COOPERATE")
+                / len(m.rounds)
                 if m.rounds
                 else 0.0
             )
             winner = (
                 m.result.first_agent_id
                 if m.result.first_score > m.result.second_score
-                else (m.result.second_agent_id if m.result.second_score > m.result.first_score else None)
+                else (
+                    m.result.second_agent_id
+                    if m.result.second_score > m.result.first_score
+                    else None
+                )
             )
             pairwise_summaries.append(
                 PairwiseMatchSummary(
@@ -740,6 +873,172 @@ def simulate_tournament(req: TournamentRequest) -> TournamentResponse:
     )
 
 
+@app.post("/api/simulate/spatial", response_model=SpatialSimResponse)
+def simulate_spatial(req: SpatialSimRequest) -> SpatialSimResponse:
+    """Execute a 2D toroidal spatial grid simulation (Episode 5) across multiple generations."""
+    grid = ToroidalGrid2D(
+        width=req.width,
+        height=req.height,
+        neighborhood_type=NeighborhoodType.MOORE,
+    )
+    node_count = grid.node_count
+
+    coop_cls = STRATEGY_CATALOG.get(
+        req.coop_strategy, (None, lambda: AlwaysCooperateStrategy())
+    )[1]().__class__
+    defect_cls = STRATEGY_CATALOG.get(
+        req.defect_strategy, (None, lambda: AlwaysDefectStrategy())
+    )[1]().__class__
+
+    rounds_per_match = 1
+
+    if req.preset == "oasis":
+        # 3x3 cooperator oasis in a sea of defectors
+        strategies: list[type[Strategy]] = [defect_cls] * node_count
+        cluster_nodes = grid.get_cluster_node_ids(
+            center_x=req.width // 2, center_y=req.height // 2, radius=1
+        )
+        for n_id in cluster_nodes:
+            strategies[n_id] = coop_cls
+
+    elif req.preset == "conquest":
+        # Reciprocal conquest (Tit-for-Tat with repeated rounds)
+        strategies = [defect_cls] * node_count
+        cluster_nodes = grid.get_cluster_node_ids(
+            center_x=req.width // 2, center_y=req.height // 2, radius=1
+        )
+        for n_id in cluster_nodes:
+            strategies[n_id] = TitForTatStrategy
+        rounds_per_match = 5
+
+    elif req.preset == "split":
+        # Left half cooperates, right half defects
+        strategies = []
+        for y in range(req.height):
+            for x in range(req.width):
+                strategies.append(coop_cls if x < req.width // 2 else defect_cls)
+
+    else:
+        # Default 50/50 random mix
+        import random
+
+        rng = random.Random(42)
+        strategies = [
+            coop_cls if rng.random() < 0.5 else defect_cls for _ in range(node_count)
+        ]
+
+    tourney = SpatialTournament(
+        topology=grid,
+        initial_strategies=strategies,
+        rounds_per_match=rounds_per_match,
+    )
+
+    for _ in range(req.generations):
+        tourney.step()
+
+    gen_telemetry: list[SpatialGenerationTelemetry] = [
+        SpatialGenerationTelemetry(
+            generation=g.generation,
+            distribution=g.strategy_distribution,
+            proportions={k: round(v, 4) for k, v in g.strategy_proportions.items()},
+            grid_cells=list(g.node_strategies),
+            clustering_ratio=round(g.cooperator_clustering_ratio, 4),
+            is_fixated=g.is_fixated,
+            dominant_strategy=g.dominant_strategy,
+        )
+        for g in tourney.history
+    ]
+
+    return SpatialSimResponse(
+        width=req.width,
+        height=req.height,
+        total_nodes=node_count,
+        preset=req.preset,
+        generations=gen_telemetry,
+    )
+
+
+@app.post("/api/simulate/commons", response_model=CommonsSimResponse)
+def simulate_commons(req: CommonsSimRequest) -> CommonsSimResponse:
+    """Execute a Common-Pool Resource (CPR) & Public Goods simulation with Ostrom sanctions (Episode 8)."""
+    agents: list[Agent] = []
+
+    for i in range(1, req.sustainable_count + 1):
+        agents.append(Agent(f"sustainable_{i:02d}", SustainableHarvesterStrategy()))
+
+    for i in range(1, req.overharvester_count + 1):
+        agents.append(Agent(f"overharvester_{i:02d}", OverHarvesterStrategy()))
+
+    for i in range(1, req.sanctioner_count + 1):
+        agents.append(Agent(f"sanctioner_{i:02d}", OstromSanctionerStrategy()))
+
+    for i in range(1, req.freerider_bystander_count + 1):
+        agents.append(Agent(f"bystander_{i:02d}", SecondOrderFreeRiderStrategy()))
+
+    if len(agents) < 2:
+        raise HTTPException(
+            status_code=400,
+            detail="Commons simulation requires at least 2 agents in total.",
+        )
+
+    cpr = CommonPoolResource(
+        capacity=req.capacity,
+        stock=req.initial_stock,
+        regeneration_rate=req.regeneration_rate,
+    )
+    pgg = PublicGoodsPool(endowment=10.0, multiplier=1.6)
+
+    tourney = CommonsTournament(
+        agents=agents,
+        resource=cpr,
+        public_goods=pgg,
+        sanctions_enabled=req.sanctions_enabled,
+        graduated_sanctions=req.graduated_sanctions,
+    )
+
+    res = tourney.run_rounds(rounds=req.rounds)
+
+    leaderboard = [
+        CommonsAgentLeaderboard(
+            rank=e.rank,
+            agent_id=e.agent_id,
+            strategy_name=e.strategy_name,
+            total_score=round(e.total_score, 2),
+            average_score=round(e.average_score, 2),
+            total_contribution=round(e.total_contribution, 2),
+            sanctions_inflicted=e.sanctions_inflicted,
+            fines_received=round(e.fines_received, 2),
+            costs_paid=round(e.costs_paid, 2),
+        )
+        for e in res.leaderboard
+    ]
+
+    history = [
+        CommonsRoundTelemetry(
+            round=h["round"],
+            stock=round(h["stock"], 2),
+            mean_contribution=round(h["mean_contribution"], 2),
+            cooperation_rate=round(h["cooperation_rate"], 4),
+            sanctions_applied=h["sanctions_applied"],
+        )
+        for h in res.history
+    ]
+
+    return CommonsSimResponse(
+        total_rounds=res.total_rounds,
+        initial_stock=round(res.initial_stock, 2),
+        final_stock=round(res.final_stock, 2),
+        is_depleted=res.is_depleted,
+        overall_contribution_rate=round(res.overall_contribution_rate, 4),
+        total_sanctions=res.total_sanctions,
+        total_fines_imposed=round(res.total_fines_imposed, 2),
+        total_sanction_costs=round(res.total_sanction_costs, 2),
+        history=history,
+        leaderboard=leaderboard,
+    )
+
+
 if __name__ == "__main__":
     import uvicorn
+
     uvicorn.run("ui.server.app:app", host="0.0.0.0", port=8000, reload=True)
