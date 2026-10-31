@@ -10,6 +10,7 @@ from collections import defaultdict
 from collections.abc import Sequence
 from dataclasses import dataclass, field
 from enum import Enum
+from pathlib import Path
 from typing import Protocol, runtime_checkable
 
 from the_dilemma_experiment.domain.action import Action
@@ -404,15 +405,36 @@ class SimulatedCognitiveClient:
             )
 
 
+def _load_dotenv_if_present() -> None:
+    """Load key-value pairs from .env into os.environ if not already defined."""
+    for base in [Path.cwd(), Path(__file__).resolve().parents[3]]:
+        env_file = base / ".env"
+        if env_file.is_file():
+            try:
+                for line in env_file.read_text(encoding="utf-8").splitlines():
+                    line = line.strip()
+                    if line and not line.startswith("#") and "=" in line:
+                        k, v = line.split("=", 1)
+                        k, v = k.strip(), v.strip().strip("'\"")
+                        if k and k not in os.environ and v:
+                            os.environ[k] = v
+            except OSError:
+                pass
+            break
+
+
 class GeminiLLMClient:
     """Live Google Gemini client implementing the LLMProviderProtocol via google-genai SDK."""
 
     def __init__(
         self,
-        model_name: str = "gemini-2.5-flash",
+        model_name: str | None = None,
         api_key: str | None = None,
     ) -> None:
-        self.model_name = model_name
+        _load_dotenv_if_present()
+        self.model_name = (
+            model_name or os.environ.get("GEMINI_MODEL") or "gemini-2.5-flash"
+        )
         self.api_key = api_key or os.environ.get("GEMINI_API_KEY")
 
         # Lazy load SDK if present

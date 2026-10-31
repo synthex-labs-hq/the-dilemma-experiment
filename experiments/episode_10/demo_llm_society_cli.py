@@ -14,6 +14,7 @@ from the_dilemma_experiment.domain.cognitive import (
     CognitiveMatch,
     CognitivePersona,
     DeceptionTracker,
+    GeminiLLMClient,
     NegotiationChannel,
 )
 from the_dilemma_experiment.domain.context import DecisionContext
@@ -63,14 +64,20 @@ def run_interactive_match(
     rounds: int = 10,
     delay: float = 0.5,
     step_mode: bool = False,
+    use_live: bool = False,
 ) -> None:
     """Execute match with real-time streaming dialogue and deception auditing."""
+    client_a = GeminiLLMClient() if use_live else None
+    client_b = GeminiLLMClient() if use_live else None
+
     strat_a = CognitiveStrategy(
         persona=persona_a,
+        client=client_a,
         agent_id="Agent_Alpha",
     )
     strat_b = CognitiveStrategy(
         persona=persona_b,
+        client=client_b,
         agent_id="Agent_Beta",
     )
     agent_a = Agent("Agent_Alpha", strat_a)
@@ -86,6 +93,13 @@ def run_interactive_match(
         deception_tracker=tracker,
     )
 
+    mode_label = (
+        f"{GREEN}Live Google Gemini API ({client_a.model_name if client_a else 'gemini-2.5-flash'}){RESET}"
+        if use_live
+        else f"{BLUE}Zero-Mock Simulated Cognitive Engine{RESET}"
+    )
+
+    print(f"{BOLD}REASONING ENGINE:{RESET} {mode_label}")
     print(
         f"{BOLD}MATCH CONFIGURATION:{RESET} {CYAN}{persona_a.value.upper()}{RESET} (Agent Alpha) vs "
         f"{MAGENTA}{persona_b.value.upper()}{RESET} (Agent Beta) | {WHITE}{rounds} Rounds{RESET}\n"
@@ -278,6 +292,11 @@ def main() -> None:
         action="store_true",
         help="Step through rounds interactively with Enter key",
     )
+    parser.add_argument(
+        "--live",
+        action="store_true",
+        help="Use live Google Gemini LLM API (reads GEMINI_API_KEY from .env or environment)",
+    )
 
     args = parser.parse_args()
     print_banner()
@@ -289,6 +308,7 @@ def main() -> None:
         rounds=args.rounds,
         delay=delay,
         step_mode=args.step,
+        use_live=args.live,
     )
 
 
