@@ -44,13 +44,21 @@ from the_dilemma_experiment.strategies.tit_for_two_tats import (
 from the_dilemma_experiment.strategies.win_stay_lose_shift import (
     WinStayLoseShiftStrategy,
 )
+from the_dilemma_experiment.strategies.zero_determinant import (
+    EqualizerStrategy,
+    ExtortionStrategy,
+    GenerousZDStrategy,
+)
 
 __all__ = [
     "AlwaysCooperateStrategy",
     "AlwaysDefectStrategy",
     "AntisocialPunisherStrategy",
+    "EqualizerStrategy",
+    "ExtortionStrategy",
     "FalseBeardStrategy",
     "GenerousTitForTatStrategy",
+    "GenerousZDStrategy",
     "GrimTriggerStrategy",
     "HypocriteStrategy",
     "ImageScorerStrategy",
