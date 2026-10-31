@@ -220,3 +220,12 @@ def test_simulate_gauntlet_endpoint() -> None:
     assert "extortioner" in opp_ids
     assert "generous_zd" in opp_ids
 
+
+def test_static_frontend_mount() -> None:
+    """Verifies that the compiled React frontend is served at root in standalone production mode."""
+    response = client.get("/")
+    assert response.status_code == 200
+    assert "<!doctype html>" in response.text.lower()
+    assert "dilemma" in response.text.lower()
+
+
