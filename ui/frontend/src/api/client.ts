@@ -235,3 +235,57 @@ export async function simulateCommons(req: CommonsSimRequest): Promise<CommonsSi
   return res.json()
 }
 
+// --- The Gauntlet Simulation Types ---
+
+export interface GauntletRequest {
+  name: string
+  opening_move: 'COOPERATE' | 'DEFECT'
+  retaliation: string
+  forgiveness: number
+  rounds_per_opponent?: number
+}
+
+export interface GauntletDuelResult {
+  opponent_id: string
+  opponent_name: string
+  opponent_archetype: string
+  custom_score: number
+  opponent_score: number
+  outcome: 'WIN' | 'TIE' | 'LOSS'
+  custom_coop_rate: number
+  opponent_coop_rate: number
+  rounds: RoundTelemetry[]
+}
+
+export interface GauntletScorecard {
+  niceness: number
+  retaliation: number
+  forgiveness: number
+  exploitation_resistance: number
+  total_score: number
+  max_possible_score: number
+  overall_win_rate: number
+  archetype_badge: string
+  verdict: string
+}
+
+export interface GauntletResponse {
+  custom_name: string
+  scorecard: GauntletScorecard
+  duels: GauntletDuelResult[]
+}
+
+export async function simulateGauntlet(req: GauntletRequest): Promise<GauntletResponse> {
+  const res = await fetch('/api/simulate/gauntlet', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(req),
+  })
+  if (!res.ok) {
+    const err = await res.json().catch(() => ({ detail: 'Gauntlet simulation failed' }))
+    throw new Error(err.detail || 'Gauntlet simulation failed')
+  }
+  return res.json()
+}
+
+

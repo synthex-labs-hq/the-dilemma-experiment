@@ -4,6 +4,8 @@ Exposes endpoints to introspect the 24+ strategy roster, simulate pairwise match
 (with noise, pre-play dialogue, and deception audits), and execute multi-agent tournaments.
 """
 
+import random
+from collections import defaultdict
 from collections.abc import Callable
 from typing import Any
 
@@ -11,6 +13,7 @@ from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel, Field
 
+from the_dilemma_experiment.domain.action import Action
 from the_dilemma_experiment.domain.agent import Agent
 from the_dilemma_experiment.domain.cognitive import (
     CognitiveMatch,
@@ -23,6 +26,7 @@ from the_dilemma_experiment.domain.commons import (
     PublicGoodsPool,
 )
 from the_dilemma_experiment.domain.commons_tournament import CommonsTournament
+from the_dilemma_experiment.domain.context import DecisionContext
 from the_dilemma_experiment.domain.match import Match
 from the_dilemma_experiment.domain.population import Population
 from the_dilemma_experiment.domain.prisoners_dilemma import PrisonersDilemma
@@ -616,6 +620,114 @@ class CommonsSimResponse(BaseModel):
     leaderboard: list[CommonsAgentLeaderboard]
 
 
+# --- Custom Strategy & The Gauntlet Benchmark Models ---
+
+class ConfigurableCustomStrategy(Strategy):
+    """Dynamically configured strategy created via the Visual Trait Builder."""
+
+    def __init__(
+        self,
+        name: str = "CustomAgent",
+        opening_move: Action = Action.COOPERATE,
+        retaliation: str = "one_to_one",  # "one_to_one", "two_tats", "grim", "pavlov", "always_defect"
+        forgiveness: float = 0.0,
+        rng: random.Random | None = None,
+    ) -> None:
+        self._name = name
+        self._opening_move = opening_move
+        self._retaliation = retaliation
+        self._forgiveness = forgiveness
+        self._rng = rng if rng is not None else random.Random()
+        self._opponent_history: dict[str, list[Action]] = defaultdict(list)
+        self._my_history: dict[str, list[Action]] = defaultdict(list)
+        self._betrayed_by: set[str] = set()
+
+    def choose_action(self, context: DecisionContext) -> Action:
+        opp_id = context.opponent_id
+        history = self._opponent_history[opp_id]
+        if not history:
+            action = self._opening_move
+            self._my_history[opp_id].append(action)
+            return action
+
+        last_opp = history[-1]
+        last_my = self._my_history[opp_id][-1]
+
+        # Check stochastic forgiveness
+        if (
+            last_opp == Action.DEFECT
+            and self._forgiveness > 0.0
+            and self._rng.random() < self._forgiveness
+        ):
+            action = Action.COOPERATE
+            self._my_history[opp_id].append(action)
+            return action
+
+        if self._retaliation == "always_defect":
+            action = Action.DEFECT
+        elif self._retaliation == "grim":
+            action = Action.DEFECT if opp_id in self._betrayed_by else Action.COOPERATE
+        elif self._retaliation == "two_tats":
+            if len(history) >= 2 and history[-1] == Action.DEFECT and history[-2] == Action.DEFECT:
+                action = Action.DEFECT
+            else:
+                action = Action.COOPERATE
+        elif self._retaliation == "pavlov":
+            was_win = (last_my == Action.COOPERATE and last_opp == Action.COOPERATE) or (
+                last_my == Action.DEFECT and last_opp == Action.COOPERATE
+            )
+            action = last_my if was_win else last_my.opposite()
+        else:
+            # Default "one_to_one" Tit-for-Tat
+            action = last_opp
+
+        self._my_history[opp_id].append(action)
+        return action
+
+    def observe(self, opponent_id: str, action: Action) -> None:
+        self._opponent_history[opponent_id].append(action)
+        if action == Action.DEFECT:
+            self._betrayed_by.add(opponent_id)
+
+
+class GauntletRequest(BaseModel):
+    name: str = Field("MyCustomAgent")
+    opening_move: str = Field("COOPERATE")  # "COOPERATE" or "DEFECT"
+    retaliation: str = Field("one_to_one")  # "one_to_one", "two_tats", "grim", "pavlov", "always_defect"
+    forgiveness: float = Field(0.1, ge=0.0, le=0.5)
+    rounds_per_opponent: int = Field(20, ge=5, le=50)
+
+
+class GauntletDuelResult(BaseModel):
+    opponent_id: str
+    opponent_name: str
+    opponent_archetype: str
+    custom_score: int
+    opponent_score: int
+    outcome: str  # "WIN", "TIE", "LOSS"
+    custom_coop_rate: float
+    opponent_coop_rate: float
+    rounds: list[RoundTelemetry]
+
+
+class GauntletScorecard(BaseModel):
+    niceness: float
+    retaliation: float
+    forgiveness: float
+    exploitation_resistance: float
+    total_score: int
+    max_possible_score: int
+    overall_win_rate: float
+    archetype_badge: str
+    verdict: str
+
+
+class GauntletResponse(BaseModel):
+    custom_name: str
+    scorecard: GauntletScorecard
+    duels: list[GauntletDuelResult]
+
+
 # --- API Routes ---
 
 
@@ -1035,6 +1147,161 @@ def simulate_commons(req: CommonsSimRequest) -> CommonsSimResponse:
         total_sanction_costs=round(res.total_sanction_costs, 2),
         history=history,
         leaderboard=leaderboard,
+    )
+
+
+@app.post("/api/simulate/gauntlet", response_model=GauntletResponse)
+def simulate_gauntlet(req: GauntletRequest) -> GauntletResponse:
+    """Test a custom user-designed strategy against the 5 canonical Axelrodian benchmarks."""
+    gauntlet_opponents = [
+        ("tit_for_tat", "The Reciprocal Enforcer"),
+        ("always_defect", "The Pure Predator"),
+        ("win_stay_lose_shift", "The Adaptive State Machine"),
+        ("extortioner", "The Mathematical Dictator (ZD)"),
+        ("generous_zd", "The Cooperative Dictator (ZD)"),
+    ]
+
+    opening_action = Action.COOPERATE if req.opening_move.upper() == "COOPERATE" else Action.DEFECT
+    duel_results: list[GauntletDuelResult] = []
+
+    total_custom_score = 0
+    wins = 0
+
+    retaliation_score = 0.0
+    defect_match_score_opp = 0
+
+    for opp_id, default_archetype in gauntlet_opponents:
+        if opp_id not in STRATEGY_CATALOG:
+            continue
+        meta, factory = STRATEGY_CATALOG[opp_id]
+
+        custom_strat = ConfigurableCustomStrategy(
+            name=req.name,
+            opening_move=opening_action,
+            retaliation=req.retaliation,
+            forgiveness=req.forgiveness,
+            rng=random.Random(42),
+        )
+        opp_strat = factory()
+
+        agent_custom = Agent(f"custom_{req.name}", custom_strat)
+        agent_opp = Agent(opp_id, opp_strat)
+
+        match = Match(
+            first_agent=agent_custom,
+            second_agent=agent_opp,
+            game=PrisonersDilemma(),
+            round_count=req.rounds_per_opponent,
+        )
+        rounds = match.execute()
+
+        score_custom = match.result.first_score  # type: ignore[union-attr]
+        score_opp = match.result.second_score  # type: ignore[union-attr]
+
+        total_custom_score += score_custom
+        if score_custom > score_opp:
+            wins += 1
+
+        telemetry: list[RoundTelemetry] = []
+        cum_a = 0
+        cum_b = 0
+        for idx, rnd in enumerate(rounds, start=1):
+            cum_a += rnd.payoff.first
+            cum_b += rnd.payoff.second
+            telemetry.append(
+                RoundTelemetry(
+                    round_number=idx,
+                    action_a=rnd.first_action.name,
+                    action_b=rnd.second_action.name,
+                    payoff_a=rnd.payoff.first,
+                    payoff_b=rnd.payoff.second,
+                    cumulative_a=cum_a,
+                    cumulative_b=cum_b,
+                )
+            )
+
+        coop_a = sum(1 for r in telemetry if r.action_a == "COOPERATE") / len(telemetry)
+        coop_b = sum(1 for r in telemetry if r.action_b == "COOPERATE") / len(telemetry)
+
+        outcome = "WIN" if score_custom > score_opp else ("LOSS" if score_custom < score_opp else "TIE")
+
+        if opp_id == "always_defect":
+            defect_match_score_opp = score_opp
+            if len(telemetry) >= 2 and telemetry[1].action_a == "DEFECT":
+                retaliation_score = 1.0
+            elif len(telemetry) >= 3 and telemetry[2].action_a == "DEFECT":
+                retaliation_score = 0.5
+            else:
+                retaliation_score = 0.0
+
+        duel_results.append(
+            GauntletDuelResult(
+                opponent_id=opp_id,
+                opponent_name=meta.name,
+                opponent_archetype=meta.archetype or default_archetype,
+                custom_score=score_custom,
+                opponent_score=score_opp,
+                outcome=outcome,
+                custom_coop_rate=round(coop_a, 3),
+                opponent_coop_rate=round(coop_b, 3),
+                rounds=telemetry,
+            )
+        )
+
+    # Calculate Axelrodian Axioms
+    niceness = 1.0 if opening_action == Action.COOPERATE else 0.0
+    forgiveness_rating = (
+        0.0
+        if req.retaliation in ["grim", "always_defect"]
+        else round(min(1.0, 0.4 + req.forgiveness * 1.5), 2)
+    )
+
+    max_possible = req.rounds_per_opponent * 5 * 5  # 5 opponents, max 5 pts/round
+    always_defect_baseline = req.rounds_per_opponent * 1.0
+    resistance = max(
+        0.0,
+        min(
+            1.0,
+            1.0 - (defect_match_score_opp - always_defect_baseline) / (req.rounds_per_opponent * 4.0),
+        ),
+    )
+
+    # Determine archetype verdict
+    if niceness >= 0.9 and retaliation_score >= 0.9 and forgiveness_rating >= 0.5:
+        badge = "🛡️ Noble Reciprocator"
+        verdict = (
+            "Axelrodian Champion. Combines unprovoked goodwill with swift, decisive retaliation "
+            "and generous reconciliation."
+        )
+    elif niceness >= 0.9 and retaliation_score >= 0.9 and forgiveness_rating < 0.3:
+        badge = "⚡ Unforgiving Grudger"
+        verdict = "Stern sentinel. Never starts conflict, but never forgets or pardons betrayal."
+    elif niceness < 0.3 and retaliation_score >= 0.5:
+        badge = "🗡️ Cynical Predator"
+        verdict = "Exploits cooperative partners ruthlessly from round one; vulnerable to mutual defection gridlock."
+    elif niceness >= 0.9 and retaliation_score < 0.4:
+        badge = "🕊️ Vulnerable Altruist"
+        verdict = "Saintly and cooperative, but easily exploited by predators and mathematical extortioners."
+    else:
+        badge = "⚖️ Adaptive Pragmatist"
+        verdict = "Pragmatic agent balancing opportunistic gain with retaliatory deterrence."
+
+    scorecard = GauntletScorecard(
+        niceness=niceness,
+        retaliation=retaliation_score,
+        forgiveness=forgiveness_rating,
+        exploitation_resistance=round(resistance, 2),
+        total_score=total_custom_score,
+        max_possible_score=max_possible,
+        overall_win_rate=round(wins / max(1, len(duel_results)), 2),
+        archetype_badge=badge,
+        verdict=verdict,
+    )
+
+    return GauntletResponse(
+        custom_name=req.name,
+        scorecard=scorecard,
+        duels=duel_results,
     )
 
 
