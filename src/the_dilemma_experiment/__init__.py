@@ -22,6 +22,12 @@ from the_dilemma_experiment.domain.game import Game
 from the_dilemma_experiment.domain.generation_result import GenerationResult
 from the_dilemma_experiment.domain.match import Match
 from the_dilemma_experiment.domain.match_result import MatchResult
+from the_dilemma_experiment.domain.memory_one import (
+    MemoryOneStrategy,
+    build_markov_transition_matrix,
+    compute_theoretical_payoffs,
+    solve_stationary_distribution,
+)
 from the_dilemma_experiment.domain.network_graph import NetworkGraph
 from the_dilemma_experiment.domain.payoff import Payoff
 from the_dilemma_experiment.domain.population import Population
@@ -120,6 +126,11 @@ from the_dilemma_experiment.strategies.tit_for_two_tats import (
 from the_dilemma_experiment.strategies.win_stay_lose_shift import (
     WinStayLoseShiftStrategy,
 )
+from the_dilemma_experiment.strategies.zero_determinant import (
+    EqualizerStrategy,
+    ExtortionStrategy,
+    GenerousZDStrategy,
+)
 
 __all__ = [
     "DEFAULT_PAYOFF_MATRIX",
@@ -134,12 +145,15 @@ __all__ = [
     "CommonsTournamentResult",
     "Coordinate2D",
     "DecisionContext",
+    "EqualizerStrategy",
     "EvolutionaryTournament",
+    "ExtortionStrategy",
     "FalseBeardStrategy",
     "FitnessMode",
     "Game",
     "GenerationResult",
     "GenerousTitForTatStrategy",
+    "GenerousZDStrategy",
     "GossipChannel",
     "GrimTriggerStrategy",
     "HypocriteStrategy",
@@ -147,6 +161,7 @@ __all__ = [
     "LeaderboardEntry",
     "Match",
     "MatchResult",
+    "MemoryOneStrategy",
     "MoralStanding",
     "NeighborhoodType",
     "NetworkGraph",
@@ -190,8 +205,11 @@ __all__ = [
     "Tournament",
     "TournamentResult",
     "WinStayLoseShiftStrategy",
+    "build_markov_transition_matrix",
     "calculate_shannon_diversity",
     "categorical_tag_distance",
     "compute_tag_distance",
+    "compute_theoretical_payoffs",
     "continuous_tag_distance",
+    "solve_stationary_distribution",
 ]

@@ -20,6 +20,12 @@ from the_dilemma_experiment.domain.game import Game
 from the_dilemma_experiment.domain.generation_result import GenerationResult
 from the_dilemma_experiment.domain.match import Match
 from the_dilemma_experiment.domain.match_result import MatchResult
+from the_dilemma_experiment.domain.memory_one import (
+    MemoryOneStrategy,
+    build_markov_transition_matrix,
+    compute_theoretical_payoffs,
+    solve_stationary_distribution,
+)
 from the_dilemma_experiment.domain.network_graph import NetworkGraph
 from the_dilemma_experiment.domain.payoff import Payoff
 from the_dilemma_experiment.domain.population import Population
@@ -91,6 +97,7 @@ __all__ = [
     "LeaderboardEntry",
     "Match",
     "MatchResult",
+    "MemoryOneStrategy",
     "MoralStanding",
     "NeighborhoodType",
     "NetworkGraph",
@@ -122,8 +129,11 @@ __all__ = [
     "ToroidalGrid2D",
     "Tournament",
     "TournamentResult",
+    "build_markov_transition_matrix",
     "calculate_shannon_diversity",
     "categorical_tag_distance",
     "compute_tag_distance",
+    "compute_theoretical_payoffs",
     "continuous_tag_distance",
+    "solve_stationary_distribution",
 ]
