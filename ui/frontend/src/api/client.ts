@@ -131,3 +131,107 @@ export async function simulateTournament(req: TournamentRequest): Promise<Tourna
   }
   return res.json()
 }
+
+// --- Spatial Simulation Types ---
+
+export interface SpatialGenerationTelemetry {
+  generation: number
+  distribution: Record<string, number>
+  proportions: Record<string, number>
+  grid_cells: string[]
+  clustering_ratio: number
+  is_fixated: boolean
+  dominant_strategy: string
+}
+
+export interface SpatialSimResponse {
+  width: number
+  height: number
+  total_nodes: number
+  preset: string
+  generations: SpatialGenerationTelemetry[]
+}
+
+export interface SpatialSimRequest {
+  width?: number
+  height?: number
+  preset: string
+  generations?: number
+  coop_strategy?: string
+  defect_strategy?: string
+}
+
+export async function simulateSpatial(req: SpatialSimRequest): Promise<SpatialSimResponse> {
+  const res = await fetch('/api/simulate/spatial', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(req),
+  })
+  if (!res.ok) {
+    const err = await res.json().catch(() => ({ detail: 'Spatial simulation failed' }))
+    throw new Error(err.detail || 'Spatial simulation failed')
+  }
+  return res.json()
+}
+
+// --- Commons Simulation Types ---
+
+export interface CommonsRoundTelemetry {
+  round: number
+  stock: number
+  mean_contribution: number
+  cooperation_rate: number
+  sanctions_applied: number
+}
+
+export interface CommonsAgentLeaderboard {
+  rank: number
+  agent_id: string
+  strategy_name: string
+  total_score: number
+  average_score: number
+  total_contribution: number
+  sanctions_inflicted: number
+  fines_received: number
+  costs_paid: number
+}
+
+export interface CommonsSimResponse {
+  total_rounds: number
+  initial_stock: number
+  final_stock: number
+  is_depleted: boolean
+  overall_contribution_rate: number
+  total_sanctions: number
+  total_fines_imposed: number
+  total_sanction_costs: number
+  history: CommonsRoundTelemetry[]
+  leaderboard: CommonsAgentLeaderboard[]
+}
+
+export interface CommonsSimRequest {
+  sustainable_count?: number
+  overharvester_count?: number
+  sanctioner_count?: number
+  freerider_bystander_count?: number
+  rounds?: number
+  initial_stock?: number
+  capacity?: number
+  regeneration_rate?: number
+  sanctions_enabled?: boolean
+  graduated_sanctions?: boolean
+}
+
+export async function simulateCommons(req: CommonsSimRequest): Promise<CommonsSimResponse> {
+  const res = await fetch('/api/simulate/commons', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(req),
+  })
+  if (!res.ok) {
+    const err = await res.json().catch(() => ({ detail: 'Commons simulation failed' }))
+    throw new Error(err.detail || 'Commons simulation failed')
+  }
+  return res.json()
+}
+

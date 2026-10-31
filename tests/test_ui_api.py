@@ -139,3 +139,52 @@ def test_simulate_tournament_endpoint() -> None:
     assert "second_score" in first_match
     assert first_match["rounds_played"] == 10
 
+
+def test_simulate_spatial_endpoint() -> None:
+    """Verifies that the 2D toroidal spatial simulation returns multi-generation telemetry and grid cells."""
+    payload = {
+        "width": 6,
+        "height": 6,
+        "preset": "oasis",
+        "generations": 3,
+    }
+    response = client.post("/api/simulate/spatial", json=payload)
+    assert response.status_code == 200
+    data = response.json()
+
+    assert data["width"] == 6
+    assert data["height"] == 6
+    assert data["total_nodes"] == 36
+    assert data["preset"] == "oasis"
+    # Gen 0 baseline + 3 steps = 4 generations
+    assert len(data["generations"]) == 4
+    gen0 = data["generations"][0]
+    assert gen0["generation"] == 0
+    assert len(gen0["grid_cells"]) == 36
+    assert "AlwaysCooperateStrategy" in gen0["distribution"]
+    assert "AlwaysDefectStrategy" in gen0["distribution"]
+
+
+def test_simulate_commons_endpoint() -> None:
+    """Verifies that the CPR and Ostrom sanctions simulation tracks resource depletion and fines."""
+    payload = {
+        "sustainable_count": 2,
+        "overharvester_count": 2,
+        "sanctioner_count": 2,
+        "freerider_bystander_count": 0,
+        "rounds": 5,
+        "initial_stock": 50.0,
+        "capacity": 100.0,
+        "sanctions_enabled": True,
+    }
+    response = client.post("/api/simulate/commons", json=payload)
+    assert response.status_code == 200
+    data = response.json()
+
+    assert data["total_rounds"] == 5
+    assert data["initial_stock"] == 50.0
+    assert len(data["history"]) == 5
+    assert len(data["leaderboard"]) == 6
+    # Sanctions were applied against the overharvesters
+    assert data["total_sanctions"] >= 0
+    assert data["total_fines_imposed"] >= 0.0
