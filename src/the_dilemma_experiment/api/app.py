@@ -7,10 +7,12 @@ Exposes endpoints to introspect the 24+ strategy roster, simulate pairwise match
 import random
 from collections import defaultdict
 from collections.abc import Callable
+from pathlib import Path
 from typing import Any
 
 from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.staticfiles import StaticFiles
 from pydantic import BaseModel, Field
 
 from the_dilemma_experiment.domain.action import Action
@@ -1303,6 +1305,13 @@ def simulate_gauntlet(req: GauntletRequest) -> GauntletResponse:
         scorecard=scorecard,
         duels=duel_results,
     )
+
+
+# --- Static Frontend Mount (for Single-Port Standalone Deployment) ---
+
+DIST_DIR = Path(__file__).resolve().parent.parent.parent.parent / "ui" / "frontend" / "dist"
+if DIST_DIR.exists() and (DIST_DIR / "index.html").exists():
+    app.mount("/", StaticFiles(directory=str(DIST_DIR), html=True), name="static_frontend")
 
 
 if __name__ == "__main__":
