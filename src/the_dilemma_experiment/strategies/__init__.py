@@ -4,6 +4,9 @@ from the_dilemma_experiment.strategies.always_cooperate import (
 from the_dilemma_experiment.strategies.always_defect import (
     AlwaysDefectStrategy,
 )
+from the_dilemma_experiment.strategies.cognitive_strategy import (
+    CognitiveStrategy,
+)
 from the_dilemma_experiment.strategies.commons_strategies import (
     AntisocialPunisherStrategy,
     OstromSanctionerStrategy,
@@ -54,6 +57,7 @@ __all__ = [
     "AlwaysCooperateStrategy",
     "AlwaysDefectStrategy",
     "AntisocialPunisherStrategy",
+    "CognitiveStrategy",
     "EqualizerStrategy",
     "ExtortionStrategy",
     "FalseBeardStrategy",

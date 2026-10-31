@@ -2,6 +2,18 @@
 
 from the_dilemma_experiment.domain.action import Action
 from the_dilemma_experiment.domain.agent import Agent
+from the_dilemma_experiment.domain.cognitive import (
+    CognitiveMatch,
+    CognitiveMatchResult,
+    CognitivePersona,
+    DeceptionAudit,
+    DeceptionTracker,
+    DialogueTurn,
+    GeminiLLMClient,
+    LLMProviderProtocol,
+    NegotiationChannel,
+    SimulatedCognitiveClient,
+)
 from the_dilemma_experiment.domain.commons import (
     CommonPoolResource,
     PublicGoodsPool,
@@ -86,6 +98,9 @@ from the_dilemma_experiment.strategies.always_cooperate import (
 from the_dilemma_experiment.strategies.always_defect import (
     AlwaysDefectStrategy,
 )
+from the_dilemma_experiment.strategies.cognitive_strategy import (
+    CognitiveStrategy,
+)
 from the_dilemma_experiment.strategies.commons_strategies import (
     AntisocialPunisherStrategy,
     OstromSanctionerStrategy,
@@ -139,18 +154,26 @@ __all__ = [
     "AlwaysCooperateStrategy",
     "AlwaysDefectStrategy",
     "AntisocialPunisherStrategy",
+    "CognitiveMatch",
+    "CognitiveMatchResult",
+    "CognitivePersona",
+    "CognitiveStrategy",
     "CommonPoolResource",
     "CommonsLeaderboardEntry",
     "CommonsTournament",
     "CommonsTournamentResult",
     "Coordinate2D",
+    "DeceptionAudit",
+    "DeceptionTracker",
     "DecisionContext",
+    "DialogueTurn",
     "EqualizerStrategy",
     "EvolutionaryTournament",
     "ExtortionStrategy",
     "FalseBeardStrategy",
     "FitnessMode",
     "Game",
+    "GeminiLLMClient",
     "GenerationResult",
     "GenerousTitForTatStrategy",
     "GenerousZDStrategy",
@@ -158,11 +181,13 @@ __all__ = [
     "GrimTriggerStrategy",
     "HypocriteStrategy",
     "ImageScorerStrategy",
+    "LLMProviderProtocol",
     "LeaderboardEntry",
     "Match",
     "MatchResult",
     "MemoryOneStrategy",
     "MoralStanding",
+    "NegotiationChannel",
     "NeighborhoodType",
     "NetworkGraph",
     "OstromSanctionerStrategy",
@@ -183,6 +208,7 @@ __all__ = [
     "SanctionRegistry",
     "SanctionType",
     "SecondOrderFreeRiderStrategy",
+    "SimulatedCognitiveClient",
     "SpatialGenerationResult",
     "SpatialTopology",
     "SpatialTournament",
