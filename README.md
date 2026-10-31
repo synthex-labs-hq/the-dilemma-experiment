@@ -17,6 +17,9 @@ The project begins with the repeated Prisoner's Dilemma and will evolve through 
 - [Episode 5 — Spatial Networks & Topologies: The Fortress of Geography](docs/episodes/05-spatial-networks-and-topologies.md)
 - [Episode 6 — Indirect Reciprocity, Reputation & Gossip: Public Ledgers and Moral Systems](docs/episodes/06-indirect-reciprocity-and-reputation.md)
 - [Episode 7 — Tags, Tribalism & In-Group Favoritism: The Green Beard Effect](docs/episodes/07-tags-tribalism-and-in-group-favoritism.md)
+- [Episode 8 — The Tragedy of the Commons & Sanctions: Elinor Ostrom's Eight Principles](docs/episodes/08-the-tragedy-of-the-commons-and-sanctions.md)
+- [Episode 9 — Zero-Determinant Strategies & Asymmetric Power: The Press-Dyson Extortion Engine](docs/episodes/09-zero-determinant-strategies-and-asymmetric-power.md)
+- [Episode 10 — The Grand Finale: The Cognitive Revolution (LLM Multi-Agent Societies)](docs/episodes/10-the-cognitive-revolution-llm-multi-agent-societies.md)
 
 ### Implemented Strategies:
 
@@ -35,6 +38,15 @@ The project begins with the repeated Prisoner's Dilemma and will evolve through 
 - `StrictTribalStrategy` (Categorical In-Group Cooperator / Out-Group Defector)
 - `FalseBeardStrategy` (The Parasitic Chameleon Defector)
 - `TagReciprocalStrategy` (In-Group Tit-For-Tat / Out-Group Hostility)
+- `SustainableHarvesterStrategy` (Responsible Commons Harvester)
+- `OverHarvesterStrategy` (Tragedy of the Commons Exploiter)
+- `OstromSanctionerStrategy` (Altruistic Peer Punisher & Guard)
+- `SecondOrderFreeRiderStrategy` (Cooperative Free-Rider on Sanctions)
+- `AntisocialPunisherStrategy` (Spiteful Punisher of Cooperators)
+- `ExtortionStrategy` (Zero-Determinant Extortioner)
+- `EqualizerStrategy` (Zero-Determinant Unilateral Payoff Clamper)
+- `GenerousZDStrategy` (Zero-Determinant Generous Cooperator)
+- `CognitiveStrategy` (LLM Cognitive Persona: Diplomat, Machiavellian, Contractor, Realist)
 
 ## Project Status
 
@@ -47,6 +59,7 @@ The project begins with the repeated Prisoner's Dilemma and will evolve through 
 - **Episode 7**: Completed & tagged at `v0.7.0-episode-7` (167 passing unit tests)
 - **Episode 8**: Completed & tagged at `v0.8.0-episode-8` (181 passing unit tests)
 - **Episode 9**: Completed & tagged at `v0.9.0-episode-9` (189 passing unit tests)
+- **Episode 10**: Completed & tagged at `v1.0.0-episode-10` (196 passing unit tests)
 
 ## Development
 
