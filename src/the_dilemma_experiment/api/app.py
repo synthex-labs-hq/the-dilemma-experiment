@@ -501,11 +501,23 @@ class LeaderboardRow(BaseModel):
     cooperation_rate: float
 
 
+class PairwiseMatchSummary(BaseModel):
+    first_agent_id: str
+    second_agent_id: str
+    first_score: int
+    second_score: int
+    winner_id: str | None
+    rounds_played: int
+    first_cooperation_rate: float
+    second_cooperation_rate: float
+
+
 class TournamentResponse(BaseModel):
     total_agents: int
     total_matches: int
     population_cooperation_rate: float
     leaderboard: list[LeaderboardRow]
+    pairwise_matches: list[PairwiseMatchSummary] = []
 
 
 # --- API Routes ---
@@ -688,11 +700,43 @@ def simulate_tournament(req: TournamentRequest) -> TournamentResponse:
         for entry in res.leaderboard
     ]
 
+    pairwise_summaries = []
+    for m in tournament.matches:
+        if m.result:
+            coop_first = (
+                sum(1 for r in m.rounds if r.first_action.name == "COOPERATE") / len(m.rounds)
+                if m.rounds
+                else 0.0
+            )
+            coop_second = (
+                sum(1 for r in m.rounds if r.second_action.name == "COOPERATE") / len(m.rounds)
+                if m.rounds
+                else 0.0
+            )
+            winner = (
+                m.result.first_agent_id
+                if m.result.first_score > m.result.second_score
+                else (m.result.second_agent_id if m.result.second_score > m.result.first_score else None)
+            )
+            pairwise_summaries.append(
+                PairwiseMatchSummary(
+                    first_agent_id=m.result.first_agent_id,
+                    second_agent_id=m.result.second_agent_id,
+                    first_score=m.result.first_score,
+                    second_score=m.result.second_score,
+                    winner_id=winner,
+                    rounds_played=len(m.rounds),
+                    first_cooperation_rate=round(coop_first, 3),
+                    second_cooperation_rate=round(coop_second, 3),
+                )
+            )
+
     return TournamentResponse(
         total_agents=population.size,
         total_matches=res.total_matches,
         population_cooperation_rate=round(res.population_cooperation_rate, 3),
         leaderboard=leaderboard_rows,
+        pairwise_matches=pairwise_summaries,
     )
 
 
