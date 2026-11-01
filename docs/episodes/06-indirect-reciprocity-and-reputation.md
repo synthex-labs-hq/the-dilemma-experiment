@@ -9,7 +9,7 @@
 
 ## 1. The Breakdown of Direct Reciprocity
 
-In [Episode 1](./01-the-laboratory.md) through [Episode 4](./04-evolutionary-dynamics.md), cooperation survived on a single ironclad foundation: **memory of past direct encounters**. When Tit-for-Tat faced a predator, it remembered the betrayal and retaliated in the next round. When Generous Tit-for-Tat absorbed accidental noise ([Episode 3](./03-noise-and-forgiveness.md)), it did so through repeated dyadic dialogue.
+In [Episode 1](https://github.com/synthex-labs-hq/the-dilemma-experiment/blob/main/docs/episodes/01-building-the-laboratory.md) through [Episode 4](https://github.com/synthex-labs-hq/the-dilemma-experiment/blob/main/docs/episodes/04-natural-selection-and-evolution.md), cooperation survived on a single ironclad foundation: **memory of past direct encounters**. When Tit-for-Tat faced a predator, it remembered the betrayal and retaliated in the next round. When Generous Tit-for-Tat absorbed accidental noise ([Episode 3](https://github.com/synthex-labs-hq/the-dilemma-experiment/blob/main/docs/episodes/03-noise-and-forgiveness.md)), it did so through repeated dyadic dialogue.
 
 However, in massive, fluid modern societies—such as global commerce, internet marketplaces, and decentralized autonomous multi-agent networks—agents rarely interact repeatedly with the same partner. The probability of re-encountering the same agent drops toward zero:
 
@@ -94,13 +94,13 @@ Under Stern Judging, punishing a bad agent *maintains* or *restores* Good standi
 ## 3. Architecture & Domain Design
 
 In this episode, we formalized the reputation ecosystem through two Architectural Decision Records:
-- [ADR-021: Public Image Scoring Ledger](../../docs/adr/021-public-image-scoring-ledger.md)
-- [ADR-022: Second-Order Moral Systems and Gossip Channel](../../docs/adr/022-second-order-moral-systems-and-gossip.md)
+- [ADR-021: Public Image Scoring Ledger](https://github.com/synthex-labs-hq/the-dilemma-experiment/blob/main/docs/adr/021-public-image-scoring-ledger.md)
+- [ADR-022: Second-Order Moral Systems and Gossip Channel](https://github.com/synthex-labs-hq/the-dilemma-experiment/blob/main/docs/adr/022-second-order-moral-systems-and-gossip.md)
 
 ![Reputation Ledger](./images/ep6_reputation_ledger.jpg)
 
 ### 3.1 The Public Ledger: `ReputationRegistry`
-[`ReputationRegistry`](file:///home/vayana/Desktop/personal/projects/synthex/the-dilemma-experiment/src/the_dilemma_experiment/domain/reputation.py#L29-L136) acts as an immutable public audit ledger. Every interaction creates a structured [`ReputationEvent`](file:///home/vayana/Desktop/personal/projects/synthex/the-dilemma-experiment/src/the_dilemma_experiment/domain/reputation.py#L17-L27):
+[`ReputationRegistry`](https://github.com/synthex-labs-hq/the-dilemma-experiment/blob/main/src/the_dilemma_experiment/domain/reputation.py) acts as an immutable public audit ledger. Every interaction creates a structured [`ReputationEvent`](https://github.com/synthex-labs-hq/the-dilemma-experiment/blob/main/src/the_dilemma_experiment/domain/reputation.py):
 
 ```python
 @dataclass(frozen=True, slots=True)
@@ -155,7 +155,7 @@ class GossipChannel:
 
 ## 4. The Experimental Discoveries
 
-We executed three comprehensive laboratory benchmarks using [`run_experiment.py`](file:///home/vayana/Desktop/personal/projects/synthex/the-dilemma-experiment/experiments/episode_06/run_experiment.py).
+We executed three comprehensive laboratory benchmarks using [`run_experiment.py`](https://github.com/synthex-labs-hq/the-dilemma-experiment/blob/main/experiments/episode_06/run_experiment.py).
 
 ### Experiment A: The Stranger Trap ($p = 0.0$)
 When strangers meet in total privacy with zero reputation ledger ($p = 0.0$), unconstrained predators ruthlessly exploit naive cooperators.
@@ -178,7 +178,7 @@ With full transparency ($p = 1.0$) and first-order Image Scorers ($\theta = 0$) 
 **Discovery**: Image scoring successfully suppresses predators (quarantined at score $-5$). However, the system-wide cooperation rate was depressed to **42.9%** because scorers who defected to punish predators were subsequently penalized by other scorers who mistook righteous punishment for hostility.
 
 ### Experiment C: Second-Order Stern Judging vs Hypocrites & Gossip Noise
-We introduced [`HypocriteStrategy`](file:///home/vayana/Desktop/personal/projects/synthex/the-dilemma-experiment/src/the_dilemma_experiment/strategies/hypocrite.py)—agents who cooperate when observed ($p=1$), but defect when unobserved ($p=0$). We varied public visibility $p \in [0.0, 1.0]$ and gossip error $\gamma \in [0.0, 0.25]$:
+We introduced [`HypocriteStrategy`](https://github.com/synthex-labs-hq/the-dilemma-experiment/blob/main/src/the_dilemma_experiment/strategies/hypocrite.py)—agents who cooperate when observed ($p=1$), but defect when unobserved ($p=0$). We varied public visibility $p \in [0.0, 1.0]$ and gossip error $\gamma \in [0.0, 0.25]$:
 
 | Visibility ($p$) | Gossip Error ($\gamma$) | System Coop % | Stern Judger Avg | Hypocrite Avg | Predator Avg |
 |:---:|:---:|:---:|:---:|:---:|:---:|
@@ -239,7 +239,7 @@ In **Episode 7: Tags, Tribalism & In-Group Favoritism**, we explore Riolo, Cohen
 
 ### Links & Resources
 - **Codebase**: [GitHub Repository](https://github.com/synthex-labs-hq/the-dilemma-experiment)
-- **ADR-021**: [Public Image Scoring Ledger](../../docs/adr/021-public-image-scoring-ledger.md)
-- **ADR-022**: [Second-Order Moral Systems & Gossip Channel](../../docs/adr/022-second-order-moral-systems-and-gossip.md)
-- **Benchmark Runner**: [`experiments/episode_06/run_experiment.py`](file:///home/vayana/Desktop/personal/projects/synthex/the-dilemma-experiment/experiments/episode_06/run_experiment.py)
-- **Interactive Visualizer**: [`experiments/episode_06/demo_reputation_cli.py`](file:///home/vayana/Desktop/personal/projects/synthex/the-dilemma-experiment/experiments/episode_06/demo_reputation_cli.py)
+- **ADR-021**: [Public Image Scoring Ledger](https://github.com/synthex-labs-hq/the-dilemma-experiment/blob/main/docs/adr/021-public-image-scoring-ledger.md)
+- **ADR-022**: [Second-Order Moral Systems & Gossip Channel](https://github.com/synthex-labs-hq/the-dilemma-experiment/blob/main/docs/adr/022-second-order-moral-systems-and-gossip.md)
+- **Benchmark Runner**: [`experiments/episode_06/run_experiment.py`](https://github.com/synthex-labs-hq/the-dilemma-experiment/blob/main/experiments/episode_06/run_experiment.py)
+- **Interactive Visualizer**: [`experiments/episode_06/demo_reputation_cli.py`](https://github.com/synthex-labs-hq/the-dilemma-experiment/blob/main/experiments/episode_06/demo_reputation_cli.py)

@@ -30,7 +30,7 @@ Can reciprocal cooperation still survive when an ally's hand accidentally trembl
 
 In game theory literature, this problem was first formalized by Nobel laureate Reinhard Selten in 1975 as the **"Trembling Hand"** problem, and later analyzed by Robert Axelrod, Douglas Dion, Martin Nowak, and Karl Sigmund.
 
-To model imperfect reality in our engine without compromising architecture, we established [ADR-015: Communication and Environmental Noise](../adr/015-communication-and-environmental-noise.md).
+To model imperfect reality in our engine without compromising architecture, we established [ADR-015: Communication and Environmental Noise](https://github.com/synthex-labs-hq/the-dilemma-experiment/blob/main/docs/adr/015-communication-and-environmental-noise.md).
 
 ```text
 +-------------------------------------------------------+
@@ -142,7 +142,7 @@ In a 50-round duel between two Tit-for-Tat agents under 2% noise:
 
 ### The mathematical antidotes (ADR-016)
 
-To survive in imperfect environments, agents must evolve beyond rigid mirroring. Under [ADR-016: Noise-Resilient Forgiving Strategies](../adr/016-noise-resilient-forgiving-strategies.md), we introduced three distinct paradigms of resilience:
+To survive in imperfect environments, agents must evolve beyond rigid mirroring. Under [ADR-016: Noise-Resilient Forgiving Strategies](https://github.com/synthex-labs-hq/the-dilemma-experiment/blob/main/docs/adr/016-noise-resilient-forgiving-strategies.md), we introduced three distinct paradigms of resilience:
 
 #### 1. Generous Tit-for-Tat (`GenerousTitForTatStrategy`)
 

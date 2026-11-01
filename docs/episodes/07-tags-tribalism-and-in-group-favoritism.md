@@ -89,13 +89,13 @@ When agents reproduce with mutation on tags ($\mu_\tau$) and tolerance ($\mu_T$)
 ## 3. Architecture & Domain Design
 
 We formalized tag mechanics across two Architectural Decision Records:
-- [ADR-023: Arbitrary Tags and Tolerance Mechanisms](../../docs/adr/023-arbitrary-tags-and-tolerance-mechanisms.md)
-- [ADR-024: Tag-Based Evolutionary Tournament and Tolerance Dynamics](../../docs/adr/024-tag-based-evolutionary-tournament.md)
+- [ADR-023: Arbitrary Tags and Tolerance Mechanisms](https://github.com/synthex-labs-hq/the-dilemma-experiment/blob/main/docs/adr/023-arbitrary-tags-and-tolerance-mechanisms.md)
+- [ADR-024: Tag-Based Evolutionary Tournament and Tolerance Dynamics](https://github.com/synthex-labs-hq/the-dilemma-experiment/blob/main/docs/adr/024-tag-based-evolutionary-tournament.md)
 
 ![Tag Spectrum](./images/ep7_green_beard_spectrum.jpg)
 
 ### 3.1 The Tag Models: `domain/tag.py`
-In [`tag.py`](file:///home/vayana/Desktop/personal/projects/synthex/the-dilemma-experiment/src/the_dilemma_experiment/domain/tag.py), we implemented distance functions, tolerance profiles, and Shannon diversity metrics:
+In [`tag.py`](https://github.com/synthex-labs-hq/the-dilemma-experiment/blob/main/src/the_dilemma_experiment/domain/tag.py), we implemented distance functions, tolerance profiles, and Shannon diversity metrics:
 
 ```python
 @dataclass(frozen=True, slots=True)
@@ -109,14 +109,14 @@ class TagProfile:
 ```
 
 ### 3.2 Strategy Implementations: `strategies/tag_based.py`
-We introduced four fundamental tag-based strategies in [`tag_based.py`](file:///home/vayana/Desktop/personal/projects/synthex/the-dilemma-experiment/src/the_dilemma_experiment/strategies/tag_based.py):
-1. **[`StrictTribalStrategy`](file:///home/vayana/Desktop/personal/projects/synthex/the-dilemma-experiment/src/the_dilemma_experiment/strategies/tag_based.py#L18-L30)**: Categorical tribalist. Cooperates exclusively with agents bearing the exact same discrete badge (e.g., `"BLUE"`, `"RED"`).
-2. **[`RioloToleranceStrategy`](file:///home/vayana/Desktop/personal/projects/synthex/the-dilemma-experiment/src/the_dilemma_experiment/domain/tag.py#L90-L107)**: Continuous tag $\tau \in [0.0, 1.0]$ with tolerance threshold $T$. Cooperates if $|\tau_{\text{self}} - \tau_{\text{opp}}| \le T$.
-3. **[`FalseBeardStrategy`](file:///home/vayana/Desktop/personal/projects/synthex/the-dilemma-experiment/src/the_dilemma_experiment/strategies/tag_based.py#L33-L41)**: The parasitic chameleon. Displays the majority in-group tag to trigger donations, but always defects.
-4. **[`TagReciprocalStrategy`](file:///home/vayana/Desktop/personal/projects/synthex/the-dilemma-experiment/src/the_dilemma_experiment/strategies/tag_based.py#L44-L71)**: Plays in-group Tit-for-Tat, while maintaining unconditional hostility toward out-groups.
+We introduced four fundamental tag-based strategies in [`tag_based.py`](https://github.com/synthex-labs-hq/the-dilemma-experiment/blob/main/src/the_dilemma_experiment/strategies/tag_based.py):
+1. **[`StrictTribalStrategy`](https://github.com/synthex-labs-hq/the-dilemma-experiment/blob/main/src/the_dilemma_experiment/strategies/tag_based.py)**: Categorical tribalist. Cooperates exclusively with agents bearing the exact same discrete badge (e.g., `"BLUE"`, `"RED"`).
+2. **[`RioloToleranceStrategy`](https://github.com/synthex-labs-hq/the-dilemma-experiment/blob/main/src/the_dilemma_experiment/domain/tag.py)**: Continuous tag $\tau \in [0.0, 1.0]$ with tolerance threshold $T$. Cooperates if $|\tau_{\text{self}} - \tau_{\text{opp}}| \le T$.
+3. **[`FalseBeardStrategy`](https://github.com/synthex-labs-hq/the-dilemma-experiment/blob/main/src/the_dilemma_experiment/strategies/tag_based.py)**: The parasitic chameleon. Displays the majority in-group tag to trigger donations, but always defects.
+4. **[`TagReciprocalStrategy`](https://github.com/synthex-labs-hq/the-dilemma-experiment/blob/main/src/the_dilemma_experiment/strategies/tag_based.py)**: Plays in-group Tit-for-Tat, while maintaining unconditional hostility toward out-groups.
 
 ### 3.3 The Tournament Engines: `domain/tag_tournament.py`
-We designed two tournament engines in [`tag_tournament.py`](file:///home/vayana/Desktop/personal/projects/synthex/the-dilemma-experiment/src/the_dilemma_experiment/domain/tag_tournament.py):
+We designed two tournament engines in [`tag_tournament.py`](https://github.com/synthex-labs-hq/the-dilemma-experiment/blob/main/src/the_dilemma_experiment/domain/tag_tournament.py):
 - `TagTournament`: Evaluates static stranger pairings, tracking in-group vs out-group cooperation rates.
 - `TagEvolutionaryTournament`: Executes generational replicator dynamics with independent Gaussian mutations on tags ($\mu_\tau, \sigma_\tau$) and tolerance ($\mu_T, \sigma_T$).
 
@@ -124,7 +124,7 @@ We designed two tournament engines in [`tag_tournament.py`](file:///home/vayana/
 
 ## 4. Laboratory Experiments & Discoveries
 
-We executed three scientific experiments using [`run_experiment.py`](file:///home/vayana/Desktop/personal/projects/synthex/the-dilemma-experiment/experiments/episode_07/run_experiment.py).
+We executed three scientific experiments using [`run_experiment.py`](https://github.com/synthex-labs-hq/the-dilemma-experiment/blob/main/experiments/episode_07/run_experiment.py).
 
 ### Experiment A: Categorical Tribalism (4 Tribes)
 We spawned 20 agents partitioned into 4 distinct tribes: Red, Blue, Green, and Gold (5 agents each). Agents were paired randomly as strangers with no memory or past history.
@@ -216,7 +216,7 @@ In **Episode 8: The Tragedy of the Commons & Sanctions**, we explore Garrett Har
 
 ### Links & Resources
 - **Codebase**: [GitHub Repository](https://github.com/synthex-labs-hq/the-dilemma-experiment)
-- **ADR-023**: [Arbitrary Tags & Tolerance Mechanisms](../../docs/adr/023-arbitrary-tags-and-tolerance-mechanisms.md)
-- **ADR-024**: [Tag-Based Evolutionary Tournament](../../docs/adr/024-tag-based-evolutionary-tournament.md)
-- **Benchmark Runner**: [`experiments/episode_07/run_experiment.py`](file:///home/vayana/Desktop/personal/projects/synthex/the-dilemma-experiment/experiments/episode_07/run_experiment.py)
-- **Interactive Visualizer**: [`experiments/episode_07/demo_tribalism_cli.py`](file:///home/vayana/Desktop/personal/projects/synthex/the-dilemma-experiment/experiments/episode_07/demo_tribalism_cli.py)
+- **ADR-023**: [Arbitrary Tags & Tolerance Mechanisms](https://github.com/synthex-labs-hq/the-dilemma-experiment/blob/main/docs/adr/023-arbitrary-tags-and-tolerance-mechanisms.md)
+- **ADR-024**: [Tag-Based Evolutionary Tournament](https://github.com/synthex-labs-hq/the-dilemma-experiment/blob/main/docs/adr/024-tag-based-evolutionary-tournament.md)
+- **Benchmark Runner**: [`experiments/episode_07/run_experiment.py`](https://github.com/synthex-labs-hq/the-dilemma-experiment/blob/main/experiments/episode_07/run_experiment.py)
+- **Interactive Visualizer**: [`experiments/episode_07/demo_tribalism_cli.py`](https://github.com/synthex-labs-hq/the-dilemma-experiment/blob/main/experiments/episode_07/demo_tribalism_cli.py)

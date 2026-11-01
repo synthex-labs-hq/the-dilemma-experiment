@@ -67,7 +67,7 @@ Strategies that achieve above-average fitness multiply and expand their demograp
 +-------------------------------------------------------------------------+
 ```
 
-Under [ADR-017: Replicator Dynamics Population Model](../adr/017-replicator-dynamics-population-model.md):
+Under [ADR-017: Replicator Dynamics Population Model](https://github.com/synthex-labs-hq/the-dilemma-experiment/blob/main/docs/adr/017-replicator-dynamics-population-model.md):
 
 1. **Fixed Environmental Carrying Capacity ($N$)**:
    The total population size $N = \sum_{i=1}^K N_i(t)$ is invariant across all generations ($N=100$).

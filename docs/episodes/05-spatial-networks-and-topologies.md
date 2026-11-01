@@ -48,7 +48,7 @@ Instead of an all-to-all tournament ($K_N$), an agent at node $u$ interacts stri
 +------------------------------------+------------------------------------+
 ```
 
-In our domain architecture ([ADR-019](file:///home/vayana/Desktop/personal/projects/synthex/the-dilemma-experiment/docs/adr/019-spatial-topology-abstraction.md)), we implemented two primary spatial geometries:
+In our domain architecture ([ADR-019](https://github.com/synthex-labs-hq/the-dilemma-experiment/blob/main/docs/adr/019-spatial-topology-abstraction.md)), we implemented two primary spatial geometries:
 1. **`ToroidalGrid2D`**: A regular 2D lattice wrapped around a torus (periodic boundaries). We support both **Von Neumann** (4 orthogonal neighbors) and **Moore** (8 surrounding neighbors) rules.
 2. **`NetworkGraph`**: Arbitrary complex network graphs supporting **Small-World networks** (Watts-Strogatz with rewiring parameter $\beta$) and **Scale-Free networks** (Barabási-Albert preferential attachment).
 
@@ -169,9 +169,9 @@ When long-range shortcuts become dense ($\beta > 0.2$), defector pathogens can b
 
 ### Architectural highlights
 
-1. **Pure Python & Zero External Dependencies ([ADR-006](file:///home/vayana/Desktop/personal/projects/synthex/the-dilemma-experiment/docs/adr/006-standard-library-first.md), [ADR-019](file:///home/vayana/Desktop/personal/projects/synthex/the-dilemma-experiment/docs/adr/019-spatial-topology-abstraction.md))**:
+1. **Pure Python & Zero External Dependencies ([ADR-006](https://github.com/synthex-labs-hq/the-dilemma-experiment/blob/main/docs/adr/006-standard-library-first.md), [ADR-019](https://github.com/synthex-labs-hq/the-dilemma-experiment/blob/main/docs/adr/019-spatial-topology-abstraction.md))**:
    - `ToroidalGrid2D` and `NetworkGraph` are built exclusively with standard Python 3.12 dataclasses. Zero dependencies on heavy graph libraries.
-2. **Symmetric Edge Scheduling ([ADR-020](file:///home/vayana/Desktop/personal/projects/synthex/the-dilemma-experiment/docs/adr/020-spatial-tournament-and-local-imitation.md))**:
+2. **Symmetric Edge Scheduling ([ADR-020](https://github.com/synthex-labs-hq/the-dilemma-experiment/blob/main/docs/adr/020-spatial-tournament-and-local-imitation.md))**:
    - Each unique undirected edge $\{u, v\}$ is evaluated exactly once per generation, guaranteeing computational speed and deterministic consistency.
 3. **Synchronous Double-Buffering**:
    - Generational transitions are atomic and double-buffered, eliminating sequential in-place update bias.

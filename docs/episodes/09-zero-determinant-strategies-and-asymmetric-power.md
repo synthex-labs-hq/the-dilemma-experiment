@@ -205,7 +205,7 @@ Against cooperative partners, Generous ZD achieves $(3.0, 3.0)$. If an error occ
 ```
 
 ### 3.1 Markov Analytical Engine
-In `src/the_dilemma_experiment/domain/memory_one.py`, we implemented:
+In [`memory_one.py`](https://github.com/synthex-labs-hq/the-dilemma-experiment/blob/main/src/the_dilemma_experiment/domain/memory_one.py), we implemented:
 - `build_markov_transition_matrix(p, q)`: Constructs the 4x4 row-stochastic transition matrix for states $[CC, CD, DC, DD]$.
 - `solve_stationary_distribution(matrix)`: Exact Gaussian elimination solver with partial pivoting and power-iteration fallback.
 - `compute_theoretical_payoffs(p, q)`: Computes exact infinite-horizon expected scores per round $(s_X, s_Y)$ without Monte Carlo noise.
@@ -214,7 +214,7 @@ In `src/the_dilemma_experiment/domain/memory_one.py`, we implemented:
 
 ## 4. Empirical Laboratory Findings
 
-From our automated benchmark suite (`experiments/episode_09/run_experiment.py`):
+From our automated benchmark suite ([`run_experiment.py`](https://github.com/synthex-labs-hq/the-dilemma-experiment/blob/main/experiments/episode_09/run_experiment.py)):
 
 ### Experiment A: The Unilateral Extortion Grid ($\chi = 3.0$)
 We pitted an Extortioner ($\chi = 3.0$) against six diverse opponent archetypes over 2,000 rounds:
@@ -320,3 +320,13 @@ What happens when we replace static conditional probabilities with frontier Larg
 - Cultural transmission: LLMs developing moral lexicons and emergent common law.
 
 The Dilemma Experiment reaches its climax in Episode 10.
+
+---
+
+## 8. Resources & Reproducibility
+
+- **Repository**: [https://github.com/synthex-labs-hq/the-dilemma-experiment](https://github.com/synthex-labs-hq/the-dilemma-experiment)
+- **ADR-027**: [Zero-Determinant Strategy Abstraction](https://github.com/synthex-labs-hq/the-dilemma-experiment/blob/main/docs/adr/027-zero-determinant-strategies.md)
+- **ADR-028**: [Extortioner & Equalizer Dynamics](https://github.com/synthex-labs-hq/the-dilemma-experiment/blob/main/docs/adr/028-extortion-and-equalizer-dynamics.md)
+- **Benchmark Runner**: [`experiments/episode_09/run_experiment.py`](https://github.com/synthex-labs-hq/the-dilemma-experiment/blob/main/experiments/episode_09/run_experiment.py)
+- **Interactive Visualizer**: [`experiments/episode_09/demo_zd_cli.py`](https://github.com/synthex-labs-hq/the-dilemma-experiment/blob/main/experiments/episode_09/demo_zd_cli.py)

@@ -142,7 +142,7 @@ Ostrom identified eight core design principles:
 
 ## 3. Architecture & Domain Implementation
 
-We implemented this architecture in clean, modular, zero-mock Python:
+We implemented this architecture in clean, modular, zero-mock Python in [`domain/commons.py`](https://github.com/synthex-labs-hq/the-dilemma-experiment/blob/main/src/the_dilemma_experiment/domain/commons.py) and [`strategies/commons_strategies.py`](https://github.com/synthex-labs-hq/the-dilemma-experiment/blob/main/src/the_dilemma_experiment/strategies/commons_strategies.py):
 
 ```text
   ┌───────────────────────────────────┐        ┌───────────────────────────────────┐
@@ -309,3 +309,13 @@ In 2012, William H. Press and Freeman J. Dyson published a shocking proof in *PN
 - The evolutionary vulnerability of extortioners and how mutual extortion creates mutual destruction.
 
 Stay tuned for Episode 9: *Zero-Determinant Strategies & Asymmetric Power*.
+
+---
+
+## 8. Resources & Reproducibility
+
+- **Repository**: [https://github.com/synthex-labs-hq/the-dilemma-experiment](https://github.com/synthex-labs-hq/the-dilemma-experiment)
+- **ADR-025**: [Common-Pool Resource & Public Goods Game](https://github.com/synthex-labs-hq/the-dilemma-experiment/blob/main/docs/adr/025-common-pool-resource-and-public-goods.md)
+- **ADR-026**: [Costly Peer Punishment & Ostrom Sanctions](https://github.com/synthex-labs-hq/the-dilemma-experiment/blob/main/docs/adr/026-costly-punishment-and-ostrom-sanctions.md)
+- **Benchmark Runner**: [`experiments/episode_08/run_experiment.py`](https://github.com/synthex-labs-hq/the-dilemma-experiment/blob/main/experiments/episode_08/run_experiment.py)
+- **Interactive Visualizer**: [`experiments/episode_08/demo_commons_cli.py`](https://github.com/synthex-labs-hq/the-dilemma-experiment/blob/main/experiments/episode_08/demo_commons_cli.py)

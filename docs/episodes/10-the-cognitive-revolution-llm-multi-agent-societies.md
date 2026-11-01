@@ -60,7 +60,7 @@ However, if an agent is sophisticated enough to conceal its intentions, simulate
 
 ## 3. Architecture of the Cognitive Laboratory
 
-To explore this frontier without synthetic mocking or flaky network dependencies, we implemented a dual-provider architecture in `src/the_dilemma_experiment/domain/cognitive.py`:
+To explore this frontier without synthetic mocking or flaky network dependencies, we implemented a dual-provider architecture in [`cognitive.py`](https://github.com/synthex-labs-hq/the-dilemma-experiment/blob/main/src/the_dilemma_experiment/domain/cognitive.py):
 
 ```
 ┌────────────────────────────────────────────────────────────────────────┐
@@ -126,7 +126,7 @@ An agent that states `INTENT: COOPERATE` and plays `Action.DEFECT` is audited as
 
 ![LLM Telemetry HUD](./images/ep10_llm_negotiation.jpg)
 
-We executed three comprehensive benchmarks across pairwise dyads and large-scale agent populations (`experiments/episode_10/run_experiment.py`).
+We executed three comprehensive benchmarks across pairwise dyads and large-scale agent populations ([`run_experiment.py`](https://github.com/synthex-labs-hq/the-dilemma-experiment/blob/main/experiments/episode_10/run_experiment.py)).
 
 ### Experiment A: Dyadic Cheap Talk & Coordination Matrix
 We pitted each persona pairwise over 10-round interaction matches:
@@ -273,6 +273,13 @@ As autonomous AI agents are increasingly entrusted with economic capital, negoti
 
 ---
 
-**Repository**: [github.com/synthex-labs/the-dilemma-experiment](https://github.com/synthex-labs/the-dilemma-experiment)  
+## 8. Resources & Reproducibility
+
+- **Repository**: [https://github.com/synthex-labs-hq/the-dilemma-experiment](https://github.com/synthex-labs-hq/the-dilemma-experiment)
+- **ADR-029**: [LLM Multi-Agent Negotiation and Deception Dynamics](https://github.com/synthex-labs-hq/the-dilemma-experiment/blob/main/docs/adr/029-llm-multi-agent-negotiation-and-deception.md)
+- **ADR-030**: [Cognitive Personas & Zero-Mock LLM Provider](https://github.com/synthex-labs-hq/the-dilemma-experiment/blob/main/docs/adr/030-cognitive-personas-and-zero-mock-provider.md)
+- **Benchmark Runner**: [`experiments/episode_10/run_experiment.py`](https://github.com/synthex-labs-hq/the-dilemma-experiment/blob/main/experiments/episode_10/run_experiment.py)
+- **Interactive Visualizer**: [`experiments/episode_10/demo_llm_society_cli.py`](https://github.com/synthex-labs-hq/the-dilemma-experiment/blob/main/experiments/episode_10/demo_llm_society_cli.py)
+
 **Author**: Synthex Labs Research  
 **Release**: `v1.0.0-episode-10`
