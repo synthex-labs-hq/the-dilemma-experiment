@@ -54,16 +54,27 @@ $$a_i(j) = \begin{cases} \text{COOPERATE} & \text{if } d(\tau_i, \tau_j) \le T_i
 
 Notice the crucial asymmetry: $i$ may cooperate with $j$ because $d \le T_i$, while $j$ defects against $i$ because $d > T_j$. Tolerance is strictly individual.
 
-```mermaid
-graph LR
-    subgraph Agent I [Agent i: Tag 0.50, Tol 0.15]
-    end
-    subgraph Agent J [Agent j: Tag 0.60, Tol 0.05]
-    end
-    Agent I -->|"Dist = 0.10 <= 0.15 (COOPERATE)"| Agent J
-    Agent J -->|"Dist = 0.10 > 0.05 (DEFECT)"| Agent I
-    style Agent I fill:#15803d,stroke:#22c55e,color:#ffffff
-    style Agent J fill:#b91c1c,stroke:#ef4444,color:#ffffff
+```text
+  ┌─────────────────────────────────┐
+  │             Agent i             │
+  │   Tag: 0.50  │  Tolerance: 0.15 │
+  └────────────────┬────────────────┘
+                   │
+                   │  1. Distance d(0.50, 0.60) = 0.10 <= 0.15
+                   │     Decision: COOPERATE (Pays donation cost c = 1.0)
+                   ▼
+  ┌─────────────────────────────────┐
+  │             Agent j             │
+  │   Tag: 0.60  │  Tolerance: 0.05 │
+  └────────────────┬────────────────┘
+                   │
+                   │  2. Distance d(0.60, 0.50) = 0.10 > 0.05
+                   │     Decision: DEFECT (Refuses donation; reaps benefit b = 3.0)
+                   ▼
+  ┌────────────────────────────────────────────────────────────────────────┐
+  │ ASYMMETRIC OUTCOME: Agent i earns -1.0 (Exploited)                     │
+  │                     Agent j earns +3.0 (Parasitic extraction)          │
+  └────────────────────────────────────────────────────────────────────────┘
 ```
 
 ### 2.3 The Evolutionary Boom-and-Bust Cycle
@@ -126,11 +137,10 @@ We spawned 20 agents partitioned into 4 distinct tribes: Red, Blue, Green, and G
 | **Overall Cooperation Rate** | **20.0%** |
 | **Tag Shannon Diversity ($H$)** | **1.3863** (Theoretical maximum: $\ln(4) = 1.3863$) |
 
-```mermaid
-pie title Inter-Tribal Cooperation Distribution
-    "In-Group Cooperation (Mutual Trust)" : 20
-    "Out-Group Defection (Parochial Enmity)" : 80
-```
+| Interaction Boundary | Share | Behavioral Distribution Bar | Social Outcome |
+| :--- | :---: | :--- | :--- |
+| **In-Group Pairings** *(Same Tag)* | **20%** | `████░░░░░░░░░░░░░░░░` | **100.0% Cooperation** (Perfect mutual aid within clan) |
+| **Out-Group Pairings** *(Different Tag)* | **80%** | `████████████████░░░░` | **100.0% Defection** (Strict parochial xenophobia) |
 
 **Discovery**: Arbitrary surface tags spontaneously create high-trust enclaves. Within their clan, strangers cooperate with 100% fidelity. However, the exact same mechanism guarantees 100% hostility against outsiders. **Parochial altruism and xenophobia are two sides of the same mathematical coin.**
 

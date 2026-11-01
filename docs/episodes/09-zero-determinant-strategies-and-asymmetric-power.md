@@ -86,15 +86,37 @@ $$\det(...) = 0 \implies \mathbf{v} \cdot \mathbf{u} = 0 \implies \alpha s_X + \
 
 Player $X$ has unilaterally enforced the linear equation, **independent of $Y$'s choices, learning algorithms, or memory length**.
 
-```mermaid
-graph TD
-    P["Player X selects vector p"] --> Det["Column 2 matches target vector u"]
-    Det --> Zero["Matrix Determinant = 0 (Unconditionally)"]
-    Zero --> Linear["Linear Invariant Enforced: α s_X + β s_Y + γ = 0"]
-    Linear --> CoPlayer["Co-Player Y's Strategy is Powerless to Alter the Slope"]
-    style P fill:#0284c7,stroke:#0ea5e9,color:#ffffff
-    style Zero fill:#eab308,stroke:#ca8a04,color:#000000
-    style Linear fill:#15803d,stroke:#22c55e,color:#ffffff
+```text
+  ┌──────────────────────────────────────────────────────────────────┐
+  │               Player X Selects Memory-One Vector p               │
+  │                   p = [p_CC, p_CD, p_DC, p_DD]                   │
+  └─────────────────────────────────┬────────────────────────────────┘
+                                    │
+                                    │ Sets p - e = φ * u
+                                    ▼
+  ┌──────────────────────────────────────────────────────────────────┐
+  │        Markov Transition Matrix Column 2 Matches Vector u        │
+  │       Linear dependence created between Column 2 & Column 4      │
+  └─────────────────────────────────┬────────────────────────────────┘
+                                    │
+                                    │ Determinant property of linear algebra
+                                    ▼
+  ┌──────────────────────────────────────────────────────────────────┐
+  │              Matrix Determinant = 0  (Unconditionally)            │
+  └─────────────────────────────────┬────────────────────────────────┘
+                                    │
+                                    │ v · u = 0 for stationary distribution v
+                                    ▼
+  ┌──────────────────────────────────────────────────────────────────┐
+  │            Linear Payoff Relation Unilaterally Enforced:         │
+  │                     α s_X + β s_Y + γ = 0                        │
+  └─────────────────────────────────┬────────────────────────────────┘
+                                    │
+                                    ▼
+  ┌──────────────────────────────────────────────────────────────────┐
+  │     Opponent Y's Strategy Cannot Alter the Slope or Payoff!      │
+  │      Y can only optimize their own score along X's linear rule.  │
+  └──────────────────────────────────────────────────────────────────┘
 ```
 
 ---
@@ -137,39 +159,49 @@ Against cooperative partners, Generous ZD achieves $(3.0, 3.0)$. If an error occ
 
 ## 3. Architecture & Domain Implementation
 
-```mermaid
-classDiagram
-    class Strategy {
-        <<abstract>>
-        +choose_action(context) Action
-        +observe(opponent_id, action) void
-    }
-    class MemoryOneStrategy {
-        +float p_cc
-        +float p_cd
-        +float p_dc
-        +float p_dd
-        +Action initial_action
-        +choose_action(context) Action
-        +observe(opponent_id, action) void
-        +reset() void
-    }
-    class ExtortionStrategy {
-        +float chi
-        +float phi
-    }
-    class EqualizerStrategy {
-        +float target_score
-        +float phi
-    }
-    class GenerousZDStrategy {
-        +float chi
-        +float phi
-    }
-    Strategy <|-- MemoryOneStrategy
-    MemoryOneStrategy <|-- ExtortionStrategy
-    MemoryOneStrategy <|-- EqualizerStrategy
-    MemoryOneStrategy <|-- GenerousZDStrategy
+```text
+                         ┌──────────────────────────────┐
+                         │      Strategy (Abstract)     │
+                         ├──────────────────────────────┤
+                         │ + choose_action(ctx): Action │
+                         │ + observe(opp, act): void    │
+                         └──────────────┬───────────────┘
+                                        │
+                                        │ inherits
+                                        ▼
+                         ┌──────────────────────────────┐
+                         │      MemoryOneStrategy       │
+                         ├──────────────────────────────┤
+                         │ + p_cc, p_cd, p_dc, p_dd     │
+                         │ + initial_action: Action     │
+                         │ + choose_action(ctx): Action │
+                         │ + reset(): void              │
+                         └───────┬──────────────┬───────┘
+                                 │              │
+           ┌─────────────────────┘              └─────────────────────┐
+           │                                                          │
+           ▼                                                          ▼
+  ┌──────────────────────────────┐                           ┌──────────────────────────────┐
+  │      ExtortionStrategy       │                           │       EqualizerStrategy      │
+  ├──────────────────────────────┤                           ├──────────────────────────────┤
+  │ + chi: float (χ >= 1.0)      │                           │ + target_score: float (c)    │
+  │ + phi: float (scale factor)  │                           │ + phi: float (scale factor)  │
+  ├──────────────────────────────┤                           ├──────────────────────────────┤
+  │ Enforces:                    │                           │ Enforces:                    │
+  │ (s_X - P) = χ (s_Y - P)      │                           │ s_Y = target_score (pinned)  │
+  └──────────────────────────────┘                           └──────────────────────────────┘
+                                        ▲
+                                        │
+                         ┌──────────────┴───────────────┐
+                         │      GenerousZDStrategy      │
+                         ├──────────────────────────────┤
+                         │ + chi: float (χ >= 1.0)      │
+                         │ + p_cc = 1.0 (nice)          │
+                         │ + p_dd > 0 (forgiving)       │
+                         ├──────────────────────────────┤
+                         │ Enforces:                    │
+                         │ (R - s_X) = χ (R - s_Y)      │
+                         └──────────────────────────────┘
 ```
 
 ### 3.1 Markov Analytical Engine

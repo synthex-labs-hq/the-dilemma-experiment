@@ -49,17 +49,30 @@ When an honest Image Scorer encounters a known predator ($s_{\text{predator}} < 
 
 In the next round, another honest Image Scorer inspects the punisher, observes a reduced score, and punishes the punisher! First-order systems cannot distinguish between *malicious defection* and *righteous punishment*.
 
-```mermaid
-graph TD
-    A[Image Scorer A] -->|1. Rightfully Defects Against| P[Predator P]
-    P -.->|Raw Ledger Records Defection| L[(Public Score Ledger)]
-    L -->|2. Penalizes A's Score: -1| A
-    B[Image Scorer B] -->|3. Observes Negative Score| A
-    B -->|4. Unwittingly Punishes Punisher| A
-    style A fill:#1e3a8a,stroke:#3b82f6,color:#ffffff
-    style P fill:#7f1d1d,stroke:#ef4444,color:#ffffff
-    style B fill:#1e3a8a,stroke:#3b82f6,color:#ffffff
-    style L fill:#14532d,stroke:#22c55e,color:#ffffff
+```text
+  ┌──────────────────┐               1. Rightfully Defects Against            ┌──────────────────┐
+  │  Image Scorer A  │ ─────────────────────────────────────────────────────► │    Predator P    │
+  │ (Honest Citizen) │                                                        │ (Score: -5 BAD)  │
+  └─────────┬────────┘                                                        └─────────┬────────┘
+            ▲                                                                           │
+            │ 2. Penalizes Score: -1                                  Raw Ledger Event: │
+            │    ("DEFECT recorded")                                  A defected on P   │
+            │                                                                           ▼
+            │                                                               ┌──────────────────┐
+            └────────────────────────────────────────────────────────────── │   Public Score   │
+                                                                            │      Ledger      │
+                                                                            └──────────────────┘
+  ┌──────────────────┐               3. Inspects A's Score (now -1)                     ▲
+  │  Image Scorer B  │ ─────────────────────────────────────────────────────────────────┘
+  │ (Honest Citizen) │
+  └─────────┬────────┘
+            │
+            │ 4. Unwittingly Punishes Punisher (Defects against A!)
+            ▼
+  ┌──────────────────┐
+  │  Image Scorer A  │  ◄── THE ENFORCER'S DILEMMA:
+  │ (Suffers Damage) │      First-order ledgers mistake righteous punishment for malice.
+  └──────────────────┘
 ```
 
 ### 2.3 Second-Order Moral Standing (Stern Judging)
@@ -176,12 +189,11 @@ We introduced [`HypocriteStrategy`](file:///home/vayana/Desktop/personal/project
 | **0.80** | **0.05** | **78.1%** | **83.6** | 66.8 | 31.4 |
 | **0.80** | **0.25** | **61.2%** | **64.7** | 68.9 | 42.0 |
 
-```mermaid
-pie title Strategy Dominance at High Visibility (p=1.0)
-    "Stern Judgers (Ethical Enforcers)" : 65
-    "Hypocrites (Forced Virtue)" : 25
-    "Predators (Quarantined)" : 10
-```
+| Strategy Caste | Population Share | Distribution Bar (p = 1.0) | Evolutionary Status |
+| :--- | :---: | :--- | :--- |
+| **Stern Judgers** *(Ethical Enforcers)* | **65%** | `█████████████░░░░░░░` | Dominant ESS equilibrium |
+| **Hypocrites** *(Forced Virtue)* | **25%** | `█████░░░░░░░░░░░░░░░` | Subservient (coerced into cooperation) |
+| **Predators** *(Quarantined Defectors)* | **10%** | `██░░░░░░░░░░░░░░░░░░` | Starved & isolated to negative scores |
 
 **Key Discoveries**:
 1. **The Sunlight Threshold**: When public visibility exceeds $p > 0.65$, Stern Judgers outscore both Hypocrites and Predators. At $p = 1.0$, Hypocrites are forced into 100% genuine cooperation to preserve their standing.

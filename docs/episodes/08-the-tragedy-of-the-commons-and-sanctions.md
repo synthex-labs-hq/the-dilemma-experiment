@@ -50,17 +50,32 @@ $$h_{i,t}^{\text{actual}} = h_{i,t} \cdot \frac{S_t}{H_t}$$
 The remaining stock regenerates according to a regeneration rate $\rho > 0$:
 $$S_{t+1} = \min\left(K, (S_t - H_t^{\text{actual}}) \cdot (1 + \rho)\right)$$
 
-```mermaid
-graph TD
-    S0["Resource Stock S_t (Max Capacity K)"] --> Harvest["Agents Extract Extractions {h_i}"]
-    Harvest --> Remaining["Remaining Stock = S_t - Σ h_i"]
-    Remaining --> Check{"Stock > 0?"}
-    Check -->|Yes| Regen["Replenishment: S_(t+1) = Remaining * (1 + ρ)"]
-    Check -->|No| Collapse["Catastrophic Collapse: S_(t+1) = 0"]
-    Regen --> NextRound["Next Round Stock S_(t+1)"]
-    style S0 fill:#0284c7,stroke:#0ea5e9,color:#ffffff
-    style Collapse fill:#b91c1c,stroke:#ef4444,color:#ffffff
-    style Regen fill:#15803d,stroke:#22c55e,color:#ffffff
+```text
+  ┌─────────────────────────────────────────────────────────┐
+  │       Initial Resource Stock S_t (Max Capacity K)       │
+  └────────────────────────────┬────────────────────────────┘
+                               │
+                               │ Agents extract individual quotas {h_i}
+                               ▼
+  ┌─────────────────────────────────────────────────────────┐
+  │       Remaining Stock: R_t = max(0, S_t - Σ h_i)        │
+  └────────────────────────────┬────────────────────────────┘
+                               │
+                 Is remaining stock R_t > 0?
+                 ├─────────────────────────┐
+                 │ YES                     │ NO
+                 ▼                         ▼
+  ┌──────────────────────────────┐   ┌──────────────────────────────┐
+  │      Logarithmic Growth      │   │    Tragedy of the Commons    │
+  │   S_(t+1) = min(K, R_t(1+ρ)) │   │    Catastrophic Collapse     │
+  │    (Regenerates for next)    │   │         S_(t+1) = 0.0        │
+  └──────────────┬───────────────┘   └──────────────────────────────┘
+                 │
+                 ▼
+  ┌──────────────────────────────┐
+  │   Next Round Reservoir:      │
+  │   Sustainable Flow Continues │
+  └──────────────────────────────┘
 ```
 
 If agents harvest at a sustainable rate $H_t \le \frac{\rho}{1 + \rho} S_t$, the commons yields an infinite stream of utility. But if rational individuals extract at capacity, $S_t \to 0$ in a few rounds—the classic Hardin collapse.
@@ -129,37 +144,43 @@ Ostrom identified eight core design principles:
 
 We implemented this architecture in clean, modular, zero-mock Python:
 
-```mermaid
-classDiagram
-    class CommonPoolResource {
-        +float capacity
-        +float stock
-        +float regeneration_rate
-        +extract(demands: dict) dict
-        +replenish() float
-        +is_depleted() bool
-    }
-    class PublicGoodsPool {
-        +float endowment
-        +float multiplier
-        +distribute(contributions: dict) dict
-    }
-    class SanctionRegistry {
-        +float cost_ratio
-        +record_sanction(punisher, target, fine) SanctionEvent
-        +get_fines_against(agent_id) float
-        +get_costs_paid_by(agent_id) float
-    }
-    class CommonsTournament {
-        +list[Agent] agents
-        +CommonPoolResource cpr
-        +PublicGoodsPool pgg
-        +SanctionRegistry registry
-        +run(rounds: int) CommonsTournamentResult
-    }
-    CommonsTournament --> CommonPoolResource
-    CommonsTournament --> PublicGoodsPool
-    CommonsTournament --> SanctionRegistry
+```text
+  ┌───────────────────────────────────┐        ┌───────────────────────────────────┐
+  │        CommonPoolResource         │        │          PublicGoodsPool          │
+  ├───────────────────────────────────┤        ├───────────────────────────────────┤
+  │ + capacity: float                 │        │ + endowment: float                │
+  │ + stock: float                    │        │ + multiplier: float (1 < m < N)   │
+  │ + regeneration_rate: float        │        ├───────────────────────────────────┤
+  ├───────────────────────────────────┤        │ + distribute(contributions) dict  │
+  │ + extract(demands: dict) dict     │        └─────────────────┬─────────────────┘
+  │ + replenish() float               │                          │
+  │ + is_depleted() bool              │                          │
+  └─────────────────┬─────────────────┘                          │
+                    │                                            │
+                    │               ┌────────────────────────────┘
+                    │               │
+                    ▼               ▼
+  ┌────────────────────────────────────────────────────────────────────────────────┐
+  │                               CommonsTournament                                │
+  ├────────────────────────────────────────────────────────────────────────────────┤
+  │ + agents: list[Agent]                                                          │
+  │ + cpr: CommonPoolResource                                                      │
+  │ + pgg: PublicGoodsPool                                                         │
+  │ + registry: SanctionRegistry                                                   │
+  ├────────────────────────────────────────────────────────────────────────────────┤
+  │ + run(rounds: int) CommonsTournamentResult                                     │
+  └─────────────────────────────────┬──────────────────────────────────────────────┘
+                                    │
+                                    │ records peer fines & monitoring costs
+                                    ▼
+  ┌────────────────────────────────────────────────────────────────────────────────┐
+  │                                SanctionRegistry                                │
+  ├────────────────────────────────────────────────────────────────────────────────┤
+  │ + cost_ratio: float (punisher cost per unit fine levied)                       │
+  │ + record_sanction(punisher_id, target_id, fine) SanctionEvent                  │
+  │ + get_fines_against(agent_id) float                                            │
+  │ + get_costs_paid_by(agent_id) float                                            │
+  └────────────────────────────────────────────────────────────────────────────────┘
 ```
 
 ### 3.1 Strategies Under Test
